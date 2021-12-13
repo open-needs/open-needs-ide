@@ -1,0 +1,27 @@
+{
+	"req": {
+		"prefix": "req",
+		"body": [
+			".. req:: ${1:title}",
+			":id: ${2:id}",
+			":status: open",
+			":tags: ",
+			":collapse: false\n",
+			"${3:content}.\n$0"
+		],
+		"description": "Requirement need",
+		"scope": "text.restructuredtext"
+	},
+	":collapse:": {
+		"prefix": "collapse",
+		"body": ":collapse: ${1|true,false|}\n$0",
+		"description": "Collapse role",
+		"scope": "text.restructuredtext"
+	},
+	":tag:": {
+		"prefix": "tag",
+		"body": ":tag: ${1:title}\n$0",
+		"description": "Tag role",
+		"scope": "text.restructuredtext"
+	}
+}
