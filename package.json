@@ -1,0 +1,88 @@
+{
+	"name": "sphinx-needs-ext",
+	"displayName": "sphinx-needs-ext",
+	"description": "Support for sphinx-needs",
+	"publisher": "Open-Needs",
+	"author": "Open-Needs <daniel.woste@useblocks.com>",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/open-needs/open-needs-ide.git"
+	},
+	"version": "0.0.8",
+	"engines": {
+		"vscode": "^1.52.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onLanguage:restructuredtext"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"languages": [
+			{
+				"id": "restructuredtext",
+				"aliases": [
+					"reStructuredText",
+					"restructuredtext",
+					"ReStructured Text",
+					"reStructured Text",
+					"RST",
+					"ReST",
+					"reST"
+				],
+				"extensions": [
+					".rst",
+					".rest"
+				]
+			}
+		],
+		"snippets": [
+			{
+				"language": "restructuredtext",
+				"path": "./snippets/snippets.json"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "Sphinx-needs configuration",
+			"properties": {
+				"needls.docsRoot": {
+					"type": "string",
+					"default": "/sources",
+					"description": "Root directory of the reST sources. This is an absolute path!"
+				},
+				"needls.buildPath": {
+					"type": "string",
+					"default": "/build",
+					"description": "Sphinx build directory. This is an absolute path!"
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "yarn run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "yarn run compile && yarn run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.0.4",
+		"@types/node": "^12.11.7",
+		"@types/vscode": "^1.46.0",
+		"@typescript-eslint/eslint-plugin": "^4.14.1",
+		"@typescript-eslint/parser": "^4.14.1",
+		"eslint": "^7.19.0",
+		"glob": "^7.1.6",
+		"mocha": "^8.2.1",
+		"typescript": "^4.1.3",
+		"vscode-test": "^1.5.0"
+	},
+	"dependencies": {
+		"vscode-languageclient": "^7.0.0"
+	}
+}
