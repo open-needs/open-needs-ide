@@ -9,7 +9,7 @@ https://sphinxcontrib-needs.readthedocs.io/en/latest/index.html
 
 * auto-generated need IDs
 
-  ![:id: completion](docs/need_id_generation_demo.gif)
+  ![:id: completion](docs/_static/need_id_generation_demo.gif)
 
   Usage:
     * type `:` in the line directly below a need directive like `.. req::` and select `:id:` in the IntelliSense interface.
@@ -22,7 +22,7 @@ https://sphinxcontrib-needs.readthedocs.io/en/latest/index.html
 
 * code completion for `:need:` sphinx-needs role:
 
-  ![:need: completion](docs/need_role_demo.gif)
+  ![:need: completion](docs/_static/need_role_demo.gif)
 
   Usage:
     * after `:need:` role or `:links:` option type `->` which triggers the auto-completion of needs
@@ -30,10 +30,10 @@ https://sphinxcontrib-needs.readthedocs.io/en/latest/index.html
     * type `>` again to trigger the doc completion (file in which needs are specified)
     * type `/` to complete the doc path, continue until the doc path is completed to a `*.rst` file
     * type `>` to trigger completion of a specfic need by ID, expand the completion item info to see the content of the selected need
-
+    
 * go to definition for need IDs:
 
-  ![go to definition](docs/need_goto_definition_demo.gif)
+  ![go to definition](docs/_static/need_goto_definition_demo.gif)
 
   Usage:
     * move cursor to a need ID and hit `F12`
@@ -41,7 +41,7 @@ https://sphinxcontrib-needs.readthedocs.io/en/latest/index.html
 
 * need information on mouse hover:
 
-  ![hover](docs/need_hover_demo.gif)
+  ![hover](docs/_static/need_hover_demo.gif)
   
   Usage:
     * move the mouse cursor over any need ID
