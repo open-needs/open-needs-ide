@@ -1,6 +1,5 @@
 .. image:: /_static/open-needs-ide-logo.png
    :align: center
-   :width: 50%
    :class: index-logo
 
 User Manual

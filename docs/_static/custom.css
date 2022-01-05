@@ -1,5 +1,6 @@
 img.index-logo {
     margin-top: 50px;
+    max-width: 80%;
 }
 
 /* Sphinx-Needs layout fixes for Furo theme */
