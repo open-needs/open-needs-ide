@@ -20,7 +20,7 @@
 project = 'Open-Needs IDE'
 copyright = '2021, team useblocks'
 author = 'team useblocks'
-
+version = '0.1'
 
 # -- General configuration ---------------------------------------------------
 
@@ -28,7 +28,19 @@ author = 'team useblocks'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinxcontrib.needs",
+    "sphinx_panels",
 ]
+
+
+# Must be defined for Open-Needs-IDE VS Code extension
+needs_types = [dict(directive="req", title="Requirement", prefix="R_", color="#BFD8D2", style="node"),
+               dict(directive="spec", title="Specification", prefix="S_", color="#FEDCD2", style="node"),
+               dict(directive="impl", title="Implementation", prefix="I_", color="#DF744A", style="node"),
+               dict(directive="test", title="Test Case", prefix="T_", color="#DCB239", style="node"),
+               # Kept for backwards compatibility
+               dict(directive="need", title="Need", prefix="N_", color="#9856a5", style="node")
+           ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

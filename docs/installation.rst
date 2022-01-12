@@ -27,19 +27,23 @@ The first time the extension is executed it will try to install **needls** autom
 Installation of the extension
 -----------------------------
 
-1) download from vsix file `from releases <https://github.com/open-needs/open-needs-ide/releases>`__
+#. download from vsix file 
+   `from project github repository  <https://github.com/open-needs/open-needs-ide/raw/main/sphinx-needs-ext-0.0.8.vsix>`__
 
-2) `install the extension in vscode <https://code.visualstudio.com/docs/editor/extension-marketplace#_install-from-a-vsix>`__::
+#. `install the extension in vscode <https://code.visualstudio.com/docs/editor/extension-marketplace#_install-from-a-vsix>`__::
 
         code --install-extension sphinx-needs-ext-X.Y.Z.vsix
 
    *Alternatively* you can right-click the vsix file from within vscode and select `install extension`.
 
+#. Open the ``Settings`` page  ``[Ctrl + ,]`` and search for ``sphinx-needs``:
 
-3) `Open your spinx documenation project into your vscode workspace <https://code.visualstudio.com/docs/editor/workspaces#_how-do-i-open-a-vs-code-workspace>`__.
+   #. Update the **Build Path**. E.g. ``/home/my-user/my-project/docs/_build/need``.
+   #. Update the **Docs Root**. E.g. ``/home/my-user/my-project/docs``
 
-4) Open a reStructuredText file (`*.rst`) in workspace to trigger the activation of the extension.
+#. Open your Sphinx documenation project into your 
+   `vscode workspace <https://code.visualstudio.com/docs/editor/workspaces#_how-do-i-open-a-vs-code-workspace>`__.
 
-5) The first time you run the extension it will ask for permission to install the Python package **needls**. Click ``Yes`` to trigger the installation.
+#. Open a reStructuredText file (`*.rst`) in workspace to trigger the activation of the extension.
 
-**Note:** The extension is trying to get your sphinx configuration from your vscode workspace. If you face troubles with this, try to set the settings manually as explained below.
+#. The first time you run the extension it will ask for permission to install the Python package **needls**. Click ``Yes`` to trigger the installation.
