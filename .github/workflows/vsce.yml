@@ -42,6 +42,7 @@ jobs:
           path: vscode_ext/open-needs-ide-*.vsix
           retention-days: 7
       - name: Releaseing on github releases
+        # https://github.com/pyTooling/Actions/tree/main/releaser
         uses: pyTooling/Actions/releaser@r0
         with:
           token: ${{ secrets.OPEN_NEEDS_CI }}

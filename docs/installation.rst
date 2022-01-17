@@ -28,11 +28,11 @@ Installation of the extension
 -----------------------------
 
 #. download from vsix file 
-   `from project github repository  <https://github.com/open-needs/open-needs-ide/raw/main/sphinx-needs-ext-0.0.8.vsix>`__
+   `the nightly build <https://github.com/open-needs/open-needs-ide/releases/tag/nightly>`__
 
 #. `install the extension in vscode <https://code.visualstudio.com/docs/editor/extension-marketplace#_install-from-a-vsix>`__::
 
-        code --install-extension sphinx-needs-ext-X.Y.Z.vsix
+        code --install-extension open-needs-ide-X.Y.Z.vsix
 
    *Alternatively* you can right-click the vsix file from within vscode and select `install extension`.
 
