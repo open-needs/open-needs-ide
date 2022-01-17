@@ -46,7 +46,7 @@
 		],
 		"configuration": {
 			"type": "object",
-			"title": "Sphinx-needs configuration",
+			"title": "Open-Needs",
 			"properties": {
 				"needls.docsRoot": {
 					"type": "string",

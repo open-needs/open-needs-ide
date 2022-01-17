@@ -1,11 +1,25 @@
 Contribution
 ============
 
-Developing the extension
-------------------------
+CI
+--
+Our CI is based on github actions and located 
+`here <https://github.com/open-needs/open-needs-ide/actions>`__.
 
-Installation
-~~~~~~~~~~~~
+
+The CI tests / builds the following elements:
+
+* Documentation
+* VS Code extension
+
+
+VS Code extension
+-----------------
+The VS code extension is located under ``/vscode_ext/``.
+
+
+Environment preparation
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Install the following packages::
 
@@ -13,14 +27,22 @@ Install the following packages::
     npm install -g typescript
 
 
-
-VSCode API: https://code.visualstudio.com/api/references/vscode-api
-
-Build vsix file
-~~~~~~~~~~~~~~~
+Buid extension
+~~~~~~~~~~~~~~
 ::
 
     vsce package --baseContentUrl https://github.com/open-needs/open-needs-ide --baseImagesUrl https://github.com/open-needs/open-needs-ide
+
+
+Publishing extension
+~~~~~~~~~~~~~~~~~~~~
+Publishing the VS code extension is done automatically by CI, when a new tag
+gets created.
+
+Locations are:
+
+* https://open-vsx.org
+* ttps://marketplace.visualstudio.com
 
 
 Set logging level of language server
