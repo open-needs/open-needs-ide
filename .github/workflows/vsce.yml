@@ -9,7 +9,7 @@ on:
 
 env:
   DEFAULT_BRANCH: "master"
-
+  GITUHB_TOKEN: ${{ secrets.OPEN_NEEDS_CI }}
 jobs:
   extension_build:
     runs-on: ubuntu-latest
@@ -21,14 +21,30 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-      - run: npm install
-      - uses: lannonbr/vsce-action@3.0.0
-        with:
-          args: "package --baseContentUrl https://github.com/open-needs/open-needs-ide --baseImagesUrl https://github.com/open-needs/open-needs-ide"
+      - name: Installing npm dependencies
+        run: |
+          npm install -g typescript
+          npm install -g vsce
+          npm install
+        working-directory: ./vscode_ext
+      - name: Creating vsce package
+        run: "vsce package --baseContentUrl https://github.com/open-needs/open-needs-ide --baseImagesUrl https://github.com/open-needs/open-needs-ide"
+        working-directory: ./vscode_ext
         env:
           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}s
-      - uses: actions/upload-artifact@v2
+      - name: Showing vs_code dir content
+        working-directory: ./vscode_ext
+        run: ls -la .
+      - name: Storing artifacts
+        uses: actions/upload-artifact@v2
         with:
-          name: open-needs-ide-latest.vsix
-          path:   /github/workspace/open-needs-ide-0.0.8.vsix
+          name: open-needs-ide-nightly.vsix
+          path: vscode_ext/open-needs-ide-*.vsix
           retention-days: 7
+      - name: Releaseing on github releases
+        uses: pyTooling/Actions/releaser@r0
+        with:
+          token: ${{ secrets.OPEN_NEEDS_CI }}
+          tag: nightly
+          files: |
+            vscode_ext/open-needs-ide-*.vsix
