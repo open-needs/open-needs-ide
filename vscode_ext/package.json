@@ -1,13 +1,15 @@
 {
 	"name": "open-needs-ide",
-	"displayName": "open-needs-ide",
+	"displayName": "Open-Needs IDE",
 	"description": "Support for Open-Needs and Sphinx-Needs",
-	"publisher": "Open-Needs",
+	"icon": "open-needs-icon-128x128.png",
+	"publisher": "Open-Needs ",
 	"author": "Open-Needs <daniel.woste@useblocks.com>",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/open-needs/open-needs-ide.git"
 	},
+	"homepage": "https://open-needs.org/open-needs-ide/",
 	"version": "0.0.8",
 	"engines": {
 		"vscode": "^1.52.0"
@@ -30,7 +32,9 @@
 					"reStructured Text",
 					"RST",
 					"ReST",
-					"reST"
+					"reST",
+					"open-needs",
+					"sphinx-needs"
 				],
 				"extensions": [
 					".rst",
