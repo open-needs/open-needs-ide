@@ -41,6 +41,9 @@ jobs:
           name: open-needs-ide-nightly.vsix
           path: vscode_ext/open-needs-ide-*.vsix
           retention-days: 7
+      - name: Creating common vsix file
+        run: | 
+          mv vscode_ext/open-needs-ide-*.vsix vscode_ext/open-needs-ide-latest.vsix
       - name: Releaseing on github releases
         # https://github.com/pyTooling/Actions/tree/main/releaser
         uses: pyTooling/Actions/releaser@r0
@@ -49,3 +52,13 @@ jobs:
           tag: nightly
           files: |
             vscode_ext/open-needs-ide-*.vsix
+      - name: Publish to Visual Studio Marketplace
+        uses: HaaLeo/publish-vscode-extension@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          pat: ${{ secrets.AZURE_MARKETPLACE }}
+          registryUrl: https://marketplace.visualstudio.com
+          extensionFile: vscode_ext/open-needs-ide-latest.vsix
+            
+            
+            
