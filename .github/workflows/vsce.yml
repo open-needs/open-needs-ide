@@ -12,6 +12,7 @@ on:
 env:
   DEFAULT_BRANCH: "master"
   GITUHB_TOKEN: ${{ secrets.OPEN_NEEDS_CI }}
+  AZURE_TOKEN: ${{ secrets.AZURE_MARKETPLACE }}
 jobs:
   extension_build:
     runs-on: ubuntu-latest
