@@ -2,7 +2,7 @@
 	"name": "open-needs-ide",
 	"displayName": "open-needs-ide",
 	"description": "Support for Open-Needs and Sphinx-Needs",
-	"publisher": "Open-Needs community",
+	"publisher": "Open-Needs",
 	"author": "Open-Needs <daniel.woste@useblocks.com>",
 	"repository": {
 		"type": "git",

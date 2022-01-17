@@ -55,6 +55,7 @@ jobs:
           files: |
             vscode_ext/open-needs-ide-*.vsix
       - name: Publish to Visual Studio Marketplace
+        # https://github.com/marketplace/actions/publish-vs-code-extension
         uses: HaaLeo/publish-vscode-extension@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
