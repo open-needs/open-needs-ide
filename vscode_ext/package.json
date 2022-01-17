@@ -2,7 +2,7 @@
 	"name": "open-needs-ide",
 	"displayName": "Open-Needs IDE",
 	"description": "Support for Open-Needs and Sphinx-Needs",
-	"icon": "open-needs-icon-128x128.png",
+	"icon": "images/open-needs-icon-128x128.png",
 	"publisher": "Open-Needs ",
 	"author": "Open-Needs <daniel.woste@useblocks.com>",
 	"repository": {
