@@ -12,21 +12,21 @@ https://open-needs.org/open-needs-ide/
 
 ### Auto-generated IDs
 
-![IDs](images/vscode_auto_ids.gif "Auto-generated IDs")
+![IDs](https://raw.githubusercontent.com/open-needs/open-needs-ide/main/docs/images/vscode_auto_ids.gif "Auto-generated IDs")
 
 ### Snippets
 
-![Snippets](images/vscode_snippets.gif "Snippets")
+![Snippets](https://raw.githubusercontent.com/open-needs/open-needs-ide/main/docs/images/vscode_snippets.gif "Snippets")
 
 
 ### ID selection
 
-![ID selection](images/vscode_id_selection.gif "ID selection")
+![ID selection](https://raw.githubusercontent.com/open-needs/open-needs-ide/main/docs/images/vscode_id_selection.gif "ID selection")
 
 ### Need preview
 
-![Need preview](images/vscode_preview.gif "Need preview")
+![Need preview](https://raw.githubusercontent.com/open-needs/open-needs-ide/main/docs/images/vscode_preview.gif "Need preview")
 
 ### Goto definition
 
-![Goto defintion](images/vscode_goto.gif "Goto definition")
+![Goto defintion](https://raw.githubusercontent.com/open-needs/open-needs-ide/main/docs/images/vscode_goto.gif "Goto definition")
