@@ -1,8 +1,8 @@
 {
-	"name": "sphinx-needs-ext",
-	"displayName": "sphinx-needs-ext",
-	"description": "Support for sphinx-needs",
-	"publisher": "Open-Needs",
+	"name": "open-needs-ide",
+	"displayName": "open-needs-ide",
+	"description": "Support for Open-Needs and Sphinx-Needs",
+	"publisher": "Open-Needs community",
 	"author": "Open-Needs <daniel.woste@useblocks.com>",
 	"repository": {
 		"type": "git",

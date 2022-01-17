@@ -135,3 +135,5 @@ node_modules
 
 
 .vscode
+*.vsix
+out

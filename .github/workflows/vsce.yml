@@ -1,0 +1,34 @@
+# From: https://github.com/rkdarst/sphinx-actions-test/blob/master/.github/workflows/sphinx-build.yml
+
+name: vsce
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+env:
+  DEFAULT_BRANCH: "master"
+
+jobs:
+  build extension (vsix):
+    runs-on: ubuntu-latest
+    env:
+      ON_CI: True
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          lfs: true
+      - run: npm install
+      - uses: lannonbr/vsce-action@3.0.0
+        with:
+          args: "package --baseContentUrl https://github.com/open-needs/open-needs-ide --baseImagesUrl https://github.com/open-needs/open-needs-ide"
+        env:
+          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}s
+      - uses: actions/upload-artifact@v2
+        with:
+          name: open-needs-ide-latest.vsix
+          path: open-needs-ide-?.vsix
+          retention-days: 7
