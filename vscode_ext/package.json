@@ -3,7 +3,7 @@
 	"displayName": "Open-Needs IDE",
 	"description": "Support for Open-Needs and Sphinx-Needs",
 	"icon": "images/open-needs-icon-128x128.png",
-	"publisher": "Open-Needs ",
+	"publisher": "Open-Needs",
 	"author": "Open-Needs <daniel.woste@useblocks.com>",
 	"repository": {
 		"type": "git",
