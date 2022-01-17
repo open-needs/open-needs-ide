@@ -54,7 +54,7 @@ jobs:
           token: ${{ secrets.OPEN_NEEDS_CI }}
           tag: nightly
           files: |
-            vscode_ext/open-needs-ide-*.vsix
+            vscode_ext/open-needs-ide-latest.vsix
       - name: Publish to Visual Studio Marketplace
         # https://github.com/marketplace/actions/publish-vs-code-extension
         uses: HaaLeo/publish-vscode-extension@v1
