@@ -11,7 +11,7 @@ env:
   DEFAULT_BRANCH: "master"
 
 jobs:
-  build extension (vsix):
+  extension_build:
     runs-on: ubuntu-latest
     env:
       ON_CI: True
@@ -30,5 +30,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: open-needs-ide-latest.vsix
-          path: open-needs-ide-?.vsix
+          path:   /github/workspace/open-needs-ide-0.0.8.vsix
           retention-days: 7
