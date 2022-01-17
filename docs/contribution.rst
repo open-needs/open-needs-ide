@@ -44,6 +44,8 @@ Locations are:
 * https://open-vsx.org
 * ttps://marketplace.visualstudio.com
 
+For manual publishing, please follow the instructions on
+`this VS Code help page <https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token>`__.
 
 Set logging level of language server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
