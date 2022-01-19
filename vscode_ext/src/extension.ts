@@ -13,7 +13,6 @@ import {
 	ExtensionContext,
 	window,
 	OutputChannel,
-	TreeItem,
 } from 'vscode';
 
 import {
@@ -27,7 +26,7 @@ import { exec, ExecException } from 'child_process';
 
 let client: LanguageClient;
 
-let supported_version = ['0.0.9', '0.0.10']
+const supported_version = ['0.0.9', '0.0.10']
 
 async function getPythonPath(resource: Uri = null): Promise<string> {
 	try {
@@ -123,8 +122,8 @@ async function installNeedls(pythonPath: string, outChannel: OutputChannel): Pro
 			console.log(e)
 			window.showInformationMessage(`Needls could not be installed ${e}`);
 		}
-	};
-	return false;
+	}
+	return false
 }
 
 async function checkForNeedls(pythonPath: string, outChannel: OutputChannel): Promise<boolean> {
@@ -182,7 +181,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	console.log('Activating Open-Needs IDE')
 	
 	
-	let disposable = commands.registerCommand('open-needs-ide.load', () => {
+	const disposable = commands.registerCommand('open-needs-ide.load', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		const manual_welcome = 'Manual loaded open-needs-ide'
