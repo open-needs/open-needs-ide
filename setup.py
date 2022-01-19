@@ -3,17 +3,17 @@
 # See License.txt in the project root for further license information.
 # --------------------------------------------------------------------------
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
+
+from .needls.version import VERSION
 
 setup(
-    name='needls',
-    version='0.0.7',
-    url='',
-    author='Daniel Woste',
-    author_email='daniel.woste@useblocks.com',
-    description='Sphinx-neeeds JSON RPC server implementing Microsoft Language Server Protocol',
+    name="needls",
+    version=VERSION,
+    url="",
+    author="Daniel Woste",
+    author_email="daniel.woste@useblocks.com",
+    description="Sphinx-neeeds JSON RPC server implementing Microsoft Language Server Protocol",
     packages=find_packages(),
-    install_requires=[
-        'pygls==0.9.1'
-    ],
+    install_requires=["pygls==0.9.1"],
 )
