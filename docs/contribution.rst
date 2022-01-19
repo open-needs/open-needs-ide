@@ -9,8 +9,9 @@ Our CI is based on github actions and located
 
 The CI tests / builds the following elements:
 
-* Documentation
-* VS Code extension
+* Documentation (build, deploy)
+* VS Code extension (lint, test, build, release)
+* Needls (lint, test)
 
 
 VS Code extension
@@ -42,6 +43,13 @@ Open the Output log with the name **Open-Needs IDE** to see most important log m
 
 On your original VS Code instance you can set breakpoints and take a look into the Output window, on which 
 all log messages show up, which are created via ``console.log()`` in the code.
+
+Test extentsion
+~~~~~~~~~~~~~~~
+Run ``npm run test`` to run linter and other tests.
+
+To run the linter tests only, execute ``npm run lint``.
+
 
 
 Buid extension
