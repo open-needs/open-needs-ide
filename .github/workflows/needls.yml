@@ -1,0 +1,51 @@
+# From: https://github.com/rkdarst/sphinx-actions-test/blob/master/.github/workflows/sphinx-build.yml
+
+name: vsce
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+env:
+  DEFAULT_BRANCH: "master"
+jobs:
+  needls_tests:
+    name: needls Tests
+    runs-on: ["ubuntu-latest", "windows-latest"]
+    env:
+      ON_CI: True
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Set Up Python 3.9
+        # This should be in future a matrix build for various Python versions
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dev dependecies
+        run: python -m pip install -r dev-requirements.txt
+      - name: Final package list
+        run: |
+          pip freeze
+      - name: Run tests
+        run : pytest needls/tests
+
+  needls_lint:
+    runs-on: ubuntu-latest
+    name: needls Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set Up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - uses: pre-commit/action@v2.0.3
+      
+            
+            
+            

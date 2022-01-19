@@ -36,7 +36,7 @@ Installation of the extension
 
    *Alternatively* you can right-click the vsix file from within vscode and select `install extension`.
 
-#. Open the ``Settings`` page  ``[Ctrl + ,]`` and search for ``sphinx-needs``:
+#. Open the ``Settings`` page  ``[Ctrl + ,]`` and search for ``open-needs``:
 
    #. Update the **Build Path**. E.g. ``/home/my-user/my-project/docs/_build/need``.
    #. Update the **Docs Root**. E.g. ``/home/my-user/my-project/docs``
