@@ -5,11 +5,16 @@
 
 from setuptools import find_packages, setup
 
-from .needls.version import VERSION
+from distutils.util import convert_path
+
+main_ns = {}
+ver_path = convert_path("needls/version.py")
+with open(ver_path) as ver_file:
+    exec(ver_file.read(), main_ns)
 
 setup(
     name="needls",
-    version=VERSION,
+    version=main_ns["__version__"],
     url="",
     author="Daniel Woste",
     author_email="daniel.woste@useblocks.com",
