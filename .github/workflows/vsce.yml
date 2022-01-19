@@ -15,6 +15,7 @@ env:
   AZURE_TOKEN: ${{ secrets.AZURE_MARKETPLACE }}
 jobs:
   extension_build:
+    name: Build & Deploy
     runs-on: ubuntu-latest
     env:
       ON_CI: True
@@ -63,6 +64,3 @@ jobs:
           pat: ${{ secrets.AZURE_MARKETPLACE }}
           registryUrl: https://marketplace.visualstudio.com
           extensionFile: vscode_ext/open-needs-ide-latest.vsix
-            
-            
-            

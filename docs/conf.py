@@ -17,10 +17,10 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Open-Needs IDE'
-copyright = '2021, team useblocks'
-author = 'team useblocks'
-version = '0.1'
+project = "Open-Needs IDE"
+copyright = "2021, team useblocks"
+author = "team useblocks"
+version = "0.1"
 
 # -- General configuration ---------------------------------------------------
 
@@ -34,21 +34,38 @@ extensions = [
 
 
 # Must be defined for Open-Needs-IDE VS Code extension
-needs_types = [dict(directive="req", title="Requirement", prefix="R_", color="#BFD8D2", style="node"),
-               dict(directive="spec", title="Specification", prefix="S_", color="#FEDCD2", style="node"),
-               dict(directive="impl", title="Implementation", prefix="I_", color="#DF744A", style="node"),
-               dict(directive="test", title="Test Case", prefix="T_", color="#DCB239", style="node"),
-               # Kept for backwards compatibility
-               dict(directive="need", title="Need", prefix="N_", color="#9856a5", style="node")
-           ]
+needs_types = [
+    dict(
+        directive="req", title="Requirement", prefix="R_", color="#BFD8D2", style="node"
+    ),
+    dict(
+        directive="spec",
+        title="Specification",
+        prefix="S_",
+        color="#FEDCD2",
+        style="node",
+    ),
+    dict(
+        directive="impl",
+        title="Implementation",
+        prefix="I_",
+        color="#DF744A",
+        style="node",
+    ),
+    dict(
+        directive="test", title="Test Case", prefix="T_", color="#DCB239", style="node"
+    ),
+    # Kept for backwards compatibility
+    dict(directive="need", title="Need", prefix="N_", color="#9856a5", style="node"),
+]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -56,11 +73,11 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'furo'
+html_theme = "furo"
 
-html_title = 'Open-Needs IDE'
+html_title = "Open-Needs IDE"
 
-html_logo = '_static/open-needs-ide-logo.png'
+html_logo = "_static/open-needs-ide-logo.png"
 
 html_theme_options = {
     "sidebar_hide_name": True,
@@ -69,7 +86,7 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 html_sidebars = {
     "**": [
@@ -83,4 +100,4 @@ html_sidebars = {
     ]
 }
 
-html_css_files = ['custom.css']
+html_css_files = ["custom.css"]
