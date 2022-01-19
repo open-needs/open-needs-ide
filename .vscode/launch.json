@@ -1,0 +1,37 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Sphinx needs.json",
+            "type": "python",
+            "request": "launch",
+            "program": "../.venv/bin/sphinx-build",
+            "args": ["-a", "-E", "-b", "needs", ".", "_build/needs"],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/docs"
+         },
+         {
+            "name": "Sphinx HTML",
+            "type": "python",
+            "request": "launch",
+            "program": "../.venv/bin/sphinx-build",
+            "args": ["-a", "-E", "-b", "html", ".", "_build/html"],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/docs"
+         },
+         {
+            "name": "Launch Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "args": [
+                "--disable-extensions",
+                "--extensionDevelopmentPath=${workspaceFolder}/vscode_ext",
+            ],
+            "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
+            "preLaunchTask": "${defaultBuildTask}"
+          }
+    ]
+}

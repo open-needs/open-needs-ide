@@ -18,10 +18,17 @@
 		"Other"
 	],
 	"activationEvents": [
+		"onCommand:open-needs-ide.load",
 		"onLanguage:restructuredtext"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"commands": [
+			{
+				"command": "open-needs-ide.load",
+				"title": "Load Open-Needs IDE"
+			}
+		],
 		"languages": [
 			{
 				"id": "restructuredtext",

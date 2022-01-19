@@ -1,4 +1,4 @@
-# From: https://github.com/rkdarst/sphinx-actions-test/blob/master/.github/workflows/sphinx-build.yml
+# Ideas from https://dev.to/shaimendel/vs-code-extension-building-auto-ci-cd-with-github-actions-2dmf
 
 name: vsce
 on:
