@@ -13,6 +13,7 @@ import {
 	ExtensionContext,
 	window,
 	OutputChannel,
+	TreeItem,
 } from 'vscode';
 
 import {
@@ -25,6 +26,8 @@ import {
 import { exec, ExecException } from 'child_process';
 
 let client: LanguageClient;
+
+let supported_version = ['0.0.9', '0.0.10']
 
 async function getPythonPath(resource: Uri = null): Promise<string> {
 	try {
@@ -73,72 +76,75 @@ function exec_py(pythonPath: string, outChannel: OutputChannel, ...args: string[
 	});
 }
 
+async function installNeedls(pythonPath: string, outChannel: OutputChannel): Promise<boolean> {
+	const install = await window.showInformationMessage(
+			'Needls not found or is too old.\nDo you want to (re)install from GitHub now?',
+			'Yes',
+			'No'
+		).then( (item) => {
+		if ( item === 'Yes' ) {
+			return true;
+		} else {
+			return false
+		}
+	});
+	if (install === true) {
+		try {
+			await exec_py(
+				pythonPath,
+				outChannel,
+				'-m',
+				'pip',
+				'install',
+				'pip',
+				'--upgrade'
+			);
+			await exec_py(
+				pythonPath,
+				outChannel,
+				'-m',
+				'pip',
+				'uninstall',
+				'open-needs-ide',
+				'-y'
+			);
+			await exec_py(
+				pythonPath,
+				outChannel,
+				'-m',
+				'pip',
+				'install',
+				'"git+https://github.com/open-needs/open-needs-ide"',
+				'--upgrade'
+			);
+			window.showInformationMessage("Needls successfully installed.");
+			return true;
+		} catch (e){
+			console.log(e)
+			window.showInformationMessage(`Needls could not be installed ${e}`);
+		}
+	};
+	return false;
+}
+
 async function checkForNeedls(pythonPath: string, outChannel: OutputChannel): Promise<boolean> {
     try {
 		let version = await exec_py(
 			pythonPath,
 			outChannel,
 			'-c',
-			'"import needls; print(needls.__version__)"'
+			'"from needls.version import __version__; print(__version__)"'
 		);
 		version = version.trim();
-		if (version !== '0.0.8') {
-			throw 'Needls found but wrong version!';
+		if (supported_version.includes(version) === false) {
+			window.showInformationMessage(`Needls found but wrong version: ${version}\nAllowed are ${supported_version.join(', ')}`);
+			installNeedls(pythonPath, outChannel);
 		}
 		return true;
 	} catch (e) {
-		const install = await window.showInformationMessage(
-				'Needls not found. Do you want to install from GitHub now?',
-				'Yes',
-				'No'
-			).then( (item) => {
-			if ( item === 'Yes' ) {
-				return true;
-			} else {
-				return false;
-			}
-		});
-		if (install === true) {
-			try {
-				/* let pip = 'pip3';
-				if ( pythonPath !== 'python') {
-					pip = [path.dirname(pythonPath), "pip3"].join(path.sep);
-				} */
-				await exec_py(
-					pythonPath,
-					outChannel,
-					'-m',
-					'pip',
-					'install',
-					'pip',
-					'--upgrade'
-				);
-				await exec_py(
-					pythonPath,
-					outChannel,
-					'-m',
-					'pip',
-					'uninstall',
-					'"git+https://github.com/open-needs/open-needs-ide"',
-					'-y'
-				);
-				await exec_py(
-					pythonPath,
-					outChannel,
-					'-m',
-					'pip',
-					'install',
-					'"git+https://github.com/open-needs/open-needs-ide"',
-					'--upgrade'
-				);
-				window.showInformationMessage("Needls successfully installed.");
-				return true;
-			} catch {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		console.warn(e)
+		outChannel.appendLine(e);
+		window.showInformationMessage(`Error during detecting needls: ${e}`);
 	}
 }
 
@@ -171,10 +177,22 @@ async function make_needs(pythonPath: string, outChannel: OutputChannel) {
 	}
 }
 
-export async function activate(_context: ExtensionContext): Promise<void> {
+export async function activate(context: ExtensionContext): Promise<void> {
 
+	console.log('Activating Open-Needs IDE')
+	
+	
+	let disposable = commands.registerCommand('open-needs-ide.load', () => {
+		// The code you place here will be executed every time your command is executed
+		// Display a message box to the user
+		const manual_welcome = 'Manual loaded open-needs-ide'
+		console.log(manual_welcome)
+		window.showInformationMessage(manual_welcome);
+	});
+	context.subscriptions.push(disposable);
+	
 	//Create output channel for logging
-	const outChannel = window.createOutputChannel("sphinx-needs extension");
+	const outChannel = window.createOutputChannel("Open-Needs IDE");
 
 	const cwd = path.join(__dirname, "..", "..");
 	outChannel.appendLine("CWD: " + cwd);

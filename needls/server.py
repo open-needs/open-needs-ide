@@ -378,7 +378,7 @@ async def did_open(ls, params: DidOpenTextDocumentParams):
 @needs_server.feature(INITIALIZED)
 def did_initialize(ls, params: InitializeParams):
     """Server was initialized."""
-    ls.show_message("Initialized sphinx-needs extension")
+    ls.show_message("Initialized Open-Needs IDE Language Server")
     return True
 
 
