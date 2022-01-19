@@ -5,7 +5,6 @@
 
 
 import * as path from 'path';
-import * as os from 'os';
 import {
 	workspace,
 	extensions,
@@ -14,7 +13,6 @@ import {
 	ExtensionContext,
 	window,
 	OutputChannel,
-	ConfigurationChangeEvent
 } from 'vscode';
 
 import {
@@ -77,7 +75,7 @@ function exec_py(pythonPath: string, outChannel: OutputChannel, ...args: string[
 
 async function checkForNeedls(pythonPath: string, outChannel: OutputChannel): Promise<boolean> {
     try {
-		var version = await exec_py(
+		let version = await exec_py(
 			pythonPath,
 			outChannel,
 			'-c',
@@ -102,10 +100,10 @@ async function checkForNeedls(pythonPath: string, outChannel: OutputChannel): Pr
 		});
 		if (install === true) {
 			try {
-				let pip = 'pip3';
+				/* let pip = 'pip3';
 				if ( pythonPath !== 'python') {
 					pip = [path.dirname(pythonPath), "pip3"].join(path.sep);
-				}
+				} */
 				await exec_py(
 					pythonPath,
 					outChannel,
@@ -144,7 +142,7 @@ async function checkForNeedls(pythonPath: string, outChannel: OutputChannel): Pr
 	}
 }
 
-async function read_settings(outChannel: OutputChannel) {
+async function read_settings(_outChannel: OutputChannel) {
 	const docs_root = workspace.getConfiguration('needls').get('docsRoot');
 	const build_path = workspace.getConfiguration('needls').get('buildPath');
 	commands.executeCommand('needls.update_settings', docs_root, build_path);
@@ -156,8 +154,8 @@ async function make_needs(pythonPath: string, outChannel: OutputChannel) {
 	if (auto_build === false) {
 		return;
 	}
-	let source_dir = workspace.getConfiguration('needls').get('docsRoot').toString();
-	let build_dir = workspace.getConfiguration('needls').get('buildPath').toString();
+	const source_dir = workspace.getConfiguration('needls').get('docsRoot').toString();
+	const build_dir = workspace.getConfiguration('needls').get('buildPath').toString();
 
 	if (source_dir) {
 		// run sphinx build: python -m sphinx.cmd.build source_dir build_dir
@@ -173,15 +171,15 @@ async function make_needs(pythonPath: string, outChannel: OutputChannel) {
 	}
 }
 
-export async function activate(context: ExtensionContext) {
+export async function activate(_context: ExtensionContext): Promise<void> {
 
 	//Create output channel for logging
-	let outChannel = window.createOutputChannel("sphinx-needs extension");
+	const outChannel = window.createOutputChannel("sphinx-needs extension");
 
 	const cwd = path.join(__dirname, "..", "..");
 	outChannel.appendLine("CWD: " + cwd);
 
-	let resource = window.activeTextEditor?.document.uri;
+	const resource = window.activeTextEditor?.document.uri;
 	const pythonPath = await getPythonPath(resource);
 	outChannel.appendLine("Python path: " + pythonPath);
 
@@ -192,7 +190,7 @@ export async function activate(context: ExtensionContext) {
 	}
 
 	// listen for changes of settings
-	workspace.onDidChangeConfiguration( (event) => {
+	workspace.onDidChangeConfiguration( (_event) => {
 		read_settings(outChannel);
 	});
 
@@ -206,7 +204,7 @@ export async function activate(context: ExtensionContext) {
 		}
 	});
 
-	let serverOptions: ServerOptions = {
+	const serverOptions: ServerOptions = {
 		run: {
 			command: pythonPath,
 			args: ["-m", "needls"],
@@ -220,7 +218,7 @@ export async function activate(context: ExtensionContext) {
 	};
 
 	// Options to control the language client
-	let clientOptions: LanguageClientOptions = {
+	const clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
 		documentSelector: [
 			{ scheme: "file", language: "restructuredtext" },
