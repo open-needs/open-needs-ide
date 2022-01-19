@@ -10,3 +10,12 @@ repos:
       - id: pyupgrade
         args:
           - --py36-plus
+  - repo: local
+    hooks:
+      - id: npm-test
+        name: running npm tests
+        entry: npm
+        args: ["run", "--prefix", "vscode_ext", "test"]
+        language: system
+        types_or: [javascript, jsx, ts, tsx]
+        pass_filenames: false
