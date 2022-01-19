@@ -1,6 +1,6 @@
 # From: https://github.com/rkdarst/sphinx-actions-test/blob/master/.github/workflows/sphinx-build.yml
 
-name: vsce
+name: needls
 on:
   push:
     branches:
@@ -11,8 +11,8 @@ env:
   DEFAULT_BRANCH: "master"
 jobs:
   needls_tests:
-    name: needls Tests
-    runs-on: ["ubuntu-latest", "windows-latest"]
+    name: Tests
+    runs-on: ubuntu-latest
     env:
       ON_CI: True
     steps:
@@ -32,11 +32,10 @@ jobs:
         run: |
           pip freeze
       - name: Run tests
-        run : pytest needls/tests
+        run: pytest needls/tests
 
   needls_lint:
-    runs-on: ubuntu-latest
-    name: needls Lint
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,7 +44,3 @@ jobs:
         with:
           python-version: "3.9"
       - uses: pre-commit/action@v2.0.3
-      
-            
-            
-            
