@@ -31,9 +31,12 @@ jobs:
           npm install -g vsce
           npm install
         working-directory: ./vscode_ext
-      - name: Testing
-        run: npm run test
-        working-directory: ./vscode_ext
+      - name: Run headless test
+        # https://github.com/GabrielBB/xvfb-action
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: npm test
+          working-directory: ./vscode_ext
       - name: Creating vsce package
         run: "vsce package --baseContentUrl https://github.com/open-needs/open-needs-ide --baseImagesUrl https://github.com/open-needs/open-needs-ide"
         working-directory: ./vscode_ext
