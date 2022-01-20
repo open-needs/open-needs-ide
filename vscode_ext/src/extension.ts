@@ -5,6 +5,8 @@
 
 
 import * as path from 'path';
+import * as fs from 'fs';
+
 import {
 	workspace,
 	extensions,
@@ -22,11 +24,10 @@ import {
 	ServerOptions
 } from 'vscode-languageclient/node';
 
+
 import { exec, ExecException } from 'child_process';
 
 let client: LanguageClient;
-
-const supported_version = ['0.0.9', '0.0.10']
 
 async function getPythonPath(resource: Uri = null): Promise<string> {
 	try {
@@ -126,17 +127,17 @@ async function installNeedls(pythonPath: string, outChannel: OutputChannel): Pro
 	return false
 }
 
-async function checkForNeedls(pythonPath: string, outChannel: OutputChannel): Promise<boolean> {
+async function checkForNeedls(pythonPath: string, outChannel: OutputChannel, ext_version: string): Promise<boolean> {
     try {
-		let version = await exec_py(
+		let needls_version = await exec_py(
 			pythonPath,
 			outChannel,
 			'-c',
 			'"from needls.version import __version__; print(__version__)"'
 		);
-		version = version.trim();
-		if (supported_version.includes(version) === false) {
-			window.showInformationMessage(`Needls found but wrong version: ${version}\nAllowed are ${supported_version.join(', ')}`);
+		needls_version = needls_version.trim();
+		if (ext_version != needls_version) {
+			window.showInformationMessage(`Needls found but wrong version: ${needls_version}\nVersion needed: ${ext_version}`);
 			installNeedls(pythonPath, outChannel);
 		}
 		return true;
@@ -144,7 +145,10 @@ async function checkForNeedls(pythonPath: string, outChannel: OutputChannel): Pr
 		console.warn(e)
 		outChannel.appendLine(e);
 		window.showInformationMessage(`Error during detecting needls: ${e}`);
+		installNeedls(pythonPath, outChannel);
+		return checkForNeedls(pythonPath, outChannel, ext_version)
 	}
+
 }
 
 async function read_settings(_outChannel: OutputChannel) {
@@ -179,7 +183,14 @@ async function make_needs(pythonPath: string, outChannel: OutputChannel) {
 export async function activate(context: ExtensionContext): Promise<void> {
 
 	console.log('Activating Open-Needs IDE')
-	
+
+	var extensionPath = path.join(context.extensionPath, "package.json");
+    var packageFile = JSON.parse(fs.readFileSync(extensionPath, 'utf8'));
+
+  
+	const ext_version = packageFile.version;
+	console.log(`Extension version: ${ext_version}`)
+        
 	
 	const disposable = commands.registerCommand('open-needs-ide.load', () => {
 		// The code you place here will be executed every time your command is executed
@@ -200,7 +211,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	const pythonPath = await getPythonPath(resource);
 	outChannel.appendLine("Python path: " + pythonPath);
 
-	const needls_installed = await checkForNeedls(pythonPath, outChannel);
+	const needls_installed = await checkForNeedls(pythonPath, outChannel, ext_version);
 	if ( !needls_installed ) {
 		window.showErrorMessage("Python module needls not found! Needs extension can't start.");
 		return;
