@@ -184,8 +184,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
 	console.log('Activating Open-Needs IDE')
 
-	var extensionPath = path.join(context.extensionPath, "package.json");
-    var packageFile = JSON.parse(fs.readFileSync(extensionPath, 'utf8'));
+	const extensionPath = path.join(context.extensionPath, "package.json");
+    const packageFile = JSON.parse(fs.readFileSync(extensionPath, 'utf8'));
 
   
 	const ext_version = packageFile.version;
