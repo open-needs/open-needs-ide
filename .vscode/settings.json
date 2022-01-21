@@ -1,4 +1,6 @@
 {
     "restructuredtext.syntaxHighlighting.disabled": true,
-    "restructuredtext.languageServer.disabled": true
+    "restructuredtext.languageServer.disabled": true,
+    "needls.buildPath": "/home/daniel/workspace/open-needs/open-needs-ide/docs/_build/need2",
+    "needls.docsRoot": "/home/daniel/workspace/open-needs/open-needs-ide/docs2"
 }

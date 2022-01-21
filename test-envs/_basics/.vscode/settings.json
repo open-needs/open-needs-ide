@@ -1,0 +1,4 @@
+{
+    "needls.buildPath": "{{build_path}}",
+    "needls.docsRoot": "{{docs_root}}"
+}
