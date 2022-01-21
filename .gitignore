@@ -136,3 +136,5 @@ node_modules
 *.vsix
 out
 .vscode-test
+
+test-envs/project_no_needls

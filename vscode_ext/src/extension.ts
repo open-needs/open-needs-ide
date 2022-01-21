@@ -29,25 +29,25 @@ import { exec, ExecException } from 'child_process';
 
 let client: LanguageClient;
 
-async function getPythonPath(resource: Uri = null): Promise<string> {
-	try {
-		const extension = extensions.getExtension('ms-python.python');
-		if (!extension) {
-			return 'python';
-		}
+async function getPythonPath(resource: Uri = null, outChannel: OutputChannel): Promise<string> {
+	const extension = extensions.getExtension('ms-python.python');
+	let pythonPath
+	if (extension) {
 		const usingNewInterpreterStorage = extension.packageJSON?.featureFlags?.usingNewInterpreterStorage;
 		if (usingNewInterpreterStorage) {
 			if (!extension.isActive) {
 				await extension.activate();
 			}
-			const pythonPath = extension.exports.settings.getExecutionDetails(resource).execCommand[0];
-			return pythonPath;
+			pythonPath = extension.exports.settings.getExecutionDetails(resource).execCommand[0];
 		} else {
-			return workspace.getConfiguration('python', resource).get<string>('pythonPath');
+			pythonPath = workspace.getConfiguration('python', resource).get<string>('pythonPath');
 		}
-	} catch (error) {
-		return 'python';
+	}else {
+		pythonPath = exec_py('python', outChannel, '-c', 'import sys; print(sys.executable)')
 	}
+
+	return pythonPath
+
 }
 
 function exec_py(pythonPath: string, outChannel: OutputChannel, ...args: string[]): Promise<string> {
@@ -137,18 +137,17 @@ async function checkForNeedls(pythonPath: string, outChannel: OutputChannel, ext
 		);
 		needls_version = needls_version.trim();
 		if (ext_version != needls_version) {
-			window.showInformationMessage(`Needls found but wrong version: ${needls_version}\nVersion needed: ${ext_version}`);
-			installNeedls(pythonPath, outChannel);
+			window.showWarningMessage(`Needls found but wrong version: ${needls_version}\nVersion needed: ${ext_version}. 
+			Needls should be reinstalled`);
+			return false;
 		}
 		return true;
 	} catch (e) {
 		console.warn(e)
 		outChannel.appendLine(e);
-		window.showInformationMessage(`Error during detecting needls: ${e}`);
-		installNeedls(pythonPath, outChannel);
-		return checkForNeedls(pythonPath, outChannel, ext_version)
+		window.showWarningMessage(`Error during detecting needls. Needls should be reinstalled.`);
+		return false
 	}
-
 }
 
 async function read_settings(_outChannel: OutputChannel) {
@@ -208,13 +207,16 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	outChannel.appendLine("CWD: " + cwd);
 
 	const resource = window.activeTextEditor?.document.uri;
-	const pythonPath = await getPythonPath(resource);
+	const pythonPath = await getPythonPath(resource, outChannel);
 	outChannel.appendLine("Python path: " + pythonPath);
 
-	const needls_installed = await checkForNeedls(pythonPath, outChannel, ext_version);
+	let needls_installed = await checkForNeedls(pythonPath, outChannel, ext_version);
+	if ( !needls_installed ) {
+		needls_installed = await installNeedls(pythonPath, outChannel);
+				
+	}
 	if ( !needls_installed ) {
 		window.showErrorMessage("Python module needls not found! Needs extension can't start.");
-		return;
 	}
 
 	// listen for changes of settings

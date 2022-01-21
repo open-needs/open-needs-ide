@@ -4,6 +4,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "ext_build",
 			"type": "npm",
 			"script": "watch",
 			"problemMatcher": "$tsc-watch",
@@ -11,14 +12,36 @@
 			"presentation": {
 				"reveal": "always"
 			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
 			"options": {
 				"cwd": "${workspaceFolder}/vscode_ext"
 
 			}
-		}
+		},
+		{
+            "label": "env_setup",
+            "command": "python",
+            "args": [
+                "test-envs/setup_envs.py",
+                
+            ],
+            "presentation": {
+                "echo": true,
+                "panel": "shared",
+                "focus": true
+            }
+        },
+		{
+			"label": "prebuild_deps",
+			"dependsOn": ["ext_build", "env_setup"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+                "echo": true,
+                "panel": "shared",
+                "focus": true
+            }
+		  },
 	]
 }

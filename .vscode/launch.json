@@ -27,11 +27,19 @@
             "type": "extensionHost",
             "request": "launch",
             "args": [
-                "--disable-extensions",
+                //"--disable-extensions",
                 "--extensionDevelopmentPath=${workspaceFolder}/vscode_ext",
+                "${workspaceFolder}/test-envs/project_no_needls",
             ],
             "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
             "preLaunchTask": "${defaultBuildTask}"
+          },
+          {
+            "name": "Setup Envs",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test-envs/setup_envs.py",
+            "console": "integratedTerminal"
           }
     ]
 }
