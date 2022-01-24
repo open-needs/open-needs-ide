@@ -13,12 +13,12 @@ with open(ver_path) as ver_file:
     exec(ver_file.read(), main_ns)
 
 setup(
-    name="needls",
+    name="open-needs-ls",
     version=main_ns["__version__"],
-    url="",
+    url="https://open-needs.org",
     author="Daniel Woste",
     author_email="daniel.woste@useblocks.com",
-    description="Sphinx-neeeds JSON RPC server implementing Microsoft Language Server Protocol",
+    description="Open-Neeeds JSON RPC server implementing Microsoft Language Server Protocol",
     packages=find_packages(),
     install_requires=["pygls==0.9.1"],
 )

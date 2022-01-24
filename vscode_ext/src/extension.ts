@@ -76,9 +76,9 @@ function exec_py(pythonPath: string, outChannel: OutputChannel, ...args: string[
 	});
 }
 
-async function installNeedls(pythonPath: string, outChannel: OutputChannel): Promise<boolean> {
+async function installNeedls(pythonPath: string, outChannel: OutputChannel, version: string): Promise<boolean> {
 	const install = await window.showInformationMessage(
-			'Needls not found or is too old.\nDo you want to (re)install from GitHub now?',
+			`Install needls==${version} from PyPI?`,
 			'Yes',
 			'No'
 		).then( (item) => {
@@ -105,7 +105,7 @@ async function installNeedls(pythonPath: string, outChannel: OutputChannel): Pro
 				'-m',
 				'pip',
 				'uninstall',
-				'open-needs-ide',
+				'open-needs-ls',
 				'-y'
 			);
 			await exec_py(
@@ -114,8 +114,7 @@ async function installNeedls(pythonPath: string, outChannel: OutputChannel): Pro
 				'-m',
 				'pip',
 				'install',
-				'"git+https://github.com/open-needs/open-needs-ide"',
-				'--upgrade'
+				`open-needs-ls==${version}`
 			);
 			window.showInformationMessage("Needls successfully installed.");
 			return true;
@@ -212,7 +211,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
 	let needls_installed = await checkForNeedls(pythonPath, outChannel, ext_version);
 	if ( !needls_installed ) {
-		needls_installed = await installNeedls(pythonPath, outChannel);
+		needls_installed = await installNeedls(pythonPath, outChannel, ext_version);
 				
 	}
 	if ( !needls_installed ) {
@@ -263,8 +262,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	if (pythonPath) {
 		// Create the language client and start the client.
 		client = new LanguageClient(
-			'sphinx-needs-ls',
-			'Sphinx-Needs Language Server',
+			'open-needs-ls',
+			'Open-Needs LS',
 			serverOptions,
 			clientOptions
 		);

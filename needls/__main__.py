@@ -17,7 +17,7 @@ logging.basicConfig(filename="needls.log", level=logging.DEBUG, filemode="w")
 
 
 def add_arguments(parser):
-    parser.description = "simple sphinx-needs language server implementing LSP"
+    parser.description = "simple Open-Needs language server implementing LSP"
 
     parser.add_argument(
         "--tcp", action="store_true", help="Use TCP server instead of stdio"
