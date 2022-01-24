@@ -84,4 +84,5 @@ Content
    installation
    settings
    features
+   changelog
    contribution

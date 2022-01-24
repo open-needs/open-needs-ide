@@ -30,8 +30,21 @@ version = "0.1"
 extensions = [
     "sphinxcontrib.needs",
     "sphinx_panels",
+    "sphinx_issues",
 ]
 
+
+issues_github_path = "open-needs/open-needs-ide"
+
+# which is the equivalent to:
+issues_uri = "https://github.com/{group}/{project}/issues/{issue}"
+issues_prefix = "#"
+issues_pr_uri = "https://github.com/{group}/{project}/pull/{pr}"
+issues_pr_prefix = "#"
+issues_commit_uri = "https://github.com/{group}/{project}/commit/{commit}"
+issues_commit_prefix = "@"
+issues_user_uri = "https://github.com/{user}"
+issues_user_prefix = "@"
 
 # Must be defined for Open-Needs-IDE VS Code extension
 needs_types = [

@@ -3,3 +3,4 @@ furo
 sphinxcontrib-needs
 sphinxcontrib-plantuml
 sphinx-panels
+sphinx-issues
