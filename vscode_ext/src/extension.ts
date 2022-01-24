@@ -53,7 +53,7 @@ async function getPythonPath(resource: Uri = null, outChannel: OutputChannel): P
 function exec_py(pythonPath: string, outChannel: OutputChannel, ...args: string[]): Promise<string> {
 	const cmd = [pythonPath, ...args];
 	return new Promise<string>((resolve, reject) => {
-		outChannel.appendLine(`Running cmd: ${pythonPath} ${cmd.join(' ')}`);
+		outChannel.appendLine(`Running cmd: ${cmd.join(' ')}`);
 		exec(
 		cmd.join(' '),
 		(error: ExecException | null, stdout: string, stderr: string) => {
