@@ -70,8 +70,8 @@ class ProjectEnv:
 
         templates = {
             ".vscode/settings.json": {
-                "build_path": build_folder,
-                "docs_root": docs_folder,
+                "build_path": "${workspaceFolder}/docs/_build",
+                "docs_root": "${workspaceFolder}/docs",
             }
         }
 

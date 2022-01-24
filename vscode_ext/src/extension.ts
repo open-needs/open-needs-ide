@@ -150,8 +150,15 @@ async function checkForNeedls(pythonPath: string, outChannel: OutputChannel, ext
 }
 
 async function read_settings(_outChannel: OutputChannel) {
-	const docs_root = workspace.getConfiguration('needls').get('docsRoot');
-	const build_path = workspace.getConfiguration('needls').get('buildPath');
+	let docs_root = workspace.getConfiguration('needls').get('docsRoot').toString();
+	let build_path = workspace.getConfiguration('needls').get('buildPath').toString();
+	
+	const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
+
+	docs_root = docs_root.replace('${workspaceFolder}', currentWorkspaceFolderPath)
+	build_path = build_path.replace('${workspaceFolder}', currentWorkspaceFolderPath)
+
+		
 	commands.executeCommand('needls.update_settings', docs_root, build_path);
 }
 
@@ -162,8 +169,13 @@ async function make_needs(pythonPath: string, outChannel: OutputChannel) {
 		return;
 	}
 	
-	const source_dir = workspace.getConfiguration('needls').get('docsRoot').toString();
-	const build_dir = workspace.getConfiguration('needls').get('buildPath').toString();
+	let source_dir = workspace.getConfiguration('needls').get('docsRoot').toString();
+	let build_dir = workspace.getConfiguration('needls').get('buildPath').toString();
+
+	const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
+
+	source_dir = source_dir.replace('${workspaceFolder}', currentWorkspaceFolderPath)
+	build_dir = build_dir.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 
 	if (source_dir) {
 		// run sphinx build: python -m sphinx.cmd.build source_dir build_dir
