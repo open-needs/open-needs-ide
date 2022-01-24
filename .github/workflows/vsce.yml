@@ -1,6 +1,6 @@
 # Ideas from https://dev.to/shaimendel/vs-code-extension-building-auto-ci-cd-with-github-actions-2dmf
 
-name: vsce
+name: vsce_release
 on:
   push:
     branches:
