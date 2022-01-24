@@ -161,6 +161,7 @@ async function make_needs(pythonPath: string, outChannel: OutputChannel) {
 	if (auto_build === false) {
 		return;
 	}
+	
 	const source_dir = workspace.getConfiguration('needls').get('docsRoot').toString();
 	const build_dir = workspace.getConfiguration('needls').get('buildPath').toString();
 
@@ -171,7 +172,7 @@ async function make_needs(pythonPath: string, outChannel: OutputChannel) {
 			outChannel,
 			'-m',
 			'sphinx.cmd.build',
-			'-M needs',
+			'-b needs',
 			source_dir,
 			build_dir
 		);
@@ -182,10 +183,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
 	console.log('Activating Open-Needs IDE')
 
+	// Get current version of extension
 	const extensionPath = path.join(context.extensionPath, "package.json");
     const packageFile = JSON.parse(fs.readFileSync(extensionPath, 'utf8'));
-
-  
 	const ext_version = packageFile.version;
 	console.log(`Extension version: ${ext_version}`)
         
@@ -209,11 +209,12 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	const pythonPath = await getPythonPath(resource, outChannel);
 	outChannel.appendLine("Python path: " + pythonPath);
 
+	// Check for needls
 	let needls_installed = await checkForNeedls(pythonPath, outChannel, ext_version);
 	if ( !needls_installed ) {
 		needls_installed = await installNeedls(pythonPath, outChannel, ext_version);
-				
 	}
+
 	if ( !needls_installed ) {
 		window.showErrorMessage("Python module needls not found! Needs extension can't start.");
 	}
