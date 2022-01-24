@@ -29,7 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     env: 
-      TWINE_USERNAME : ${{ secrets.TEST_PYPI_TOKEN }}
+      TWINE_USERNAME : __token__
+      TWINE_PASSWORD : ${{ secrets.TEST_PYPI_TOKEN }}
     steps:
       - uses: actions/checkout@master
       - name: Set up Python 3.9
@@ -48,7 +49,7 @@ jobs:
         run: twine check dist/*
       - name: upload packages to Test PyPi
         # username == token from env, password must be set but empty
-        run: twine upload --password "" --repository testpypi dist/*
+        run: twine upload --repository testpypi dist/*
 
 
   # Get calls only, if publish on Test-PyPi has worked.
@@ -57,7 +58,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: publish_test
     env: 
-      TWINE_USERNAME : ${{ secrets.PYPI_TOKEN }}
+      TWINE_USERNAME : __token__
+      TWINE_PASSWORD : ${{ secrets.PYPI_TOKEN }}
     steps:
       - uses: actions/checkout@master
       - name: Set up Python 3.9
@@ -76,4 +78,4 @@ jobs:
         run: twine check dist/*
       - name: upload packages to PyPi
         # username == token from env, password must be set but empty
-        run: twine upload --password "" dist/*
+        run: twine upload dist/*
