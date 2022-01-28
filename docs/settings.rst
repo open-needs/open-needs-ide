@@ -19,6 +19,22 @@ The following variables are supported:
 
 :workspaceFolder: root folder of the currently opened workspace (since 0.0.14)
 
+settings.json
+-------------
+Inside a ``.vscode/settings.json`` file, a configuration can look like::
+
+    {
+      "needls.docsRoot": "${workspaceFolder}/docs"
+      "needls.buildPath": "${workspaceFolder}/docs/_build/need",
+    }
+
+Settings menu
+-------------
+The configuration can also be done in the "settings menu" of VS Code (``Strg + ","``).
+
+.. image:: /images/vscode_settings.png
+   :align: center 
+
 
 Known Issues and Limitations
 ----------------------------
