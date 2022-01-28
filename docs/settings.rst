@@ -9,9 +9,20 @@ This extension contributes the following settings:
                      expected. This file is created using using the
                      `sphinx-needs builder <https://sphinxcontrib-needs.readthedocs.io/en/latest/builders.html>`__
 
+Supported variables
+-------------------
+**Open-Needs IDE** supports the usage of template variables, which get replaced during runtime.
+
+Example: ``${workspaceFolder}/docs/_build``
+
+The following variables are supported:
+
+:workspaceFolder: root folder of the currently opened workspace (since 0.0.14)
+
+
 Known Issues and Limitations
 ----------------------------
 
 * restructured text files defining needs must have `.rst` file extension
 * the extension loads and parses a `needs.json`. Only one `needs.json` file is supported per vscode workspace.
-* the dependency on needls (its version) is currently hard-coded in `src/extension.ts`
+
