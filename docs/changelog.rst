@@ -13,7 +13,7 @@ Changelog
 **released**: 28.01.2022
 
 
-* Improvement: Supporting ``${workpaceFolder}`` in settings of Open-Needs IDE. :issue:`17`
+* Improvement: Supporting ``${workspaceFolder}`` in settings of Open-Needs IDE. :issue:`17`
 * Bugfix: Using ``-b needs`` for ``sphinx-build``, which uses the correct doctree folder. :issue:`21`
 * Bugfix: Correct print of executed Python commands. :issue:`19`
 
