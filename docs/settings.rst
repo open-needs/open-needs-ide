@@ -21,7 +21,7 @@ The following variables are supported:
 
 settings.json
 -------------
-Inside a ``.vscode/settings.json`` file, a configuration can look like::
+Inside a ``.vscode/settings.json`` file a configuration can look like::
 
     {
       "needls.docsRoot": "${workspaceFolder}/docs"
