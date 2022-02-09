@@ -29,7 +29,7 @@
             "args": [
                 //"--disable-extensions",
                 "--extensionDevelopmentPath=${workspaceFolder}/vscode_ext",
-                "${workspaceFolder}/test-envs/project_no_needls",
+                "${workspaceFolder}/temp-envs/project_no_needls",
             ],
             "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
             "preLaunchTask": "${defaultBuildTask}"

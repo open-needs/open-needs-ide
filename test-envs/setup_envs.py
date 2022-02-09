@@ -23,7 +23,10 @@ class ProjectEnv:
 
         self.test_envs_path = os.path.join(os.path.dirname(__file__))
         self.basics_path = os.path.join(self.test_envs_path, "_basics")
-        self.env_path = os.path.join(self.test_envs_path, name)
+        
+        self.temp_env_path = os.path.join(self.test_envs_path, "../temp-envs")
+        
+        self.env_path = os.path.join(self.temp_env_path, name)
 
     def setup(self):
         """Steers the execution of the needed tasks for project env setup"""

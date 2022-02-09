@@ -30,6 +30,10 @@ Install the following packages::
     npm install -g vsce
     npm install -g typescript
 
+Inside the folder ``/vscode_ext`` execute::
+
+    npm install
+
 
 Debugging extension
 ~~~~~~~~~~~~~~~~~~~
@@ -43,6 +47,23 @@ Open the Output log with the name **Open-Needs IDE** to see most important log m
 
 On your original VS Code instance you can set breakpoints and take a look into the Output window, on which 
 all log messages show up, which are created via ``console.log()`` in the code.
+
+Temporary Env setup for testing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+During testing the extension, it is helpful to have a clean, prepared, temporary test environment.
+These temporary envs can be found under ``/temp-envs`` and get created and loaded automatically.
+As they get generated on the fly, they are not part of the repo. So you will see them after your first debugging session was started.
+
+The source/templates for these envs are stored under ``/test-envs``, and these files are part of the repo.
+
+The script ``/test-envs/setup_envs.py`` cares about the creation and configuration of **temporary envs** under ``/temp-envs``.
+
+The folder ``/temp-envs``, or selected env-folder inside it, can be deleted to force a recreation.
+
+Please don't mix ``test-envs`` and ``temp-envs`` and perfomr deletions only on ``temp-envs``.
+
+
+
 
 Test extentsion
 ~~~~~~~~~~~~~~~
