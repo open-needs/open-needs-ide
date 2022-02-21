@@ -6,6 +6,8 @@ Changelog
 
 **released**: under development
 
+* Improvement: Supporting ``pythonPath`` config in settings of Open-Needs IDE. Default is system python path. :issue:`38`
+
 
 0.0.14
 ------

@@ -9,9 +9,7 @@ import * as fs from 'fs';
 
 import {
 	workspace,
-	extensions,
 	commands,
-	Uri,
 	ExtensionContext,
 	window,
 	OutputChannel,
@@ -29,7 +27,7 @@ import { exec, ExecException } from 'child_process';
 
 
 let client: LanguageClient;
-let log_prefix = "Extension Open-Needs: ";
+const log_prefix = "Extension Open-Needs: ";
 
 async function getPythonPath(pythonPath:string, outChannel: OutputChannel): Promise<string> {
 	// check pythonPath if empty, ask user to config; if not, use the pythonPath from workspace setting
@@ -68,7 +66,7 @@ async function checkPythonPath(pythonPath: string, outChannel: OutputChannel): P
 		// TODO: it's not stable somehow, window might not pop up, if other window pops up
 		// prompting window to ask user to config
 		window.showInformationMessage(`${log_prefix} please config python path`);
-		let user_input_pythonPath = await window.showInputBox({
+		const user_input_pythonPath = await window.showInputBox({
 			placeHolder: "Python path for Extension Open-Needs",
 			prompt: `${log_prefix} please specify python path`,
 			value: default_pythonPath,
@@ -257,10 +255,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	const cwd = path.join(__dirname, "..", "..");
 	outChannel.appendLine("CWD: " + cwd);
 
-	const resource = window.activeTextEditor?.document.uri;
-
 	// get pythonPath from workspace setting
-	let wk_pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
+	const wk_pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
 
 	const pythonPath = await getPythonPath(wk_pythonPath, outChannel);
 	outChannel.appendLine("Python path: " + pythonPath);

@@ -23,9 +23,9 @@ class ProjectEnv:
 
         self.test_envs_path = os.path.join(os.path.dirname(__file__))
         self.basics_path = os.path.join(self.test_envs_path, "_basics")
-        
+
         self.temp_env_path = os.path.join(self.test_envs_path, "../temp-envs")
-        
+
         self.env_path = os.path.join(self.temp_env_path, name)
 
     def setup(self):
@@ -75,6 +75,7 @@ class ProjectEnv:
             ".vscode/settings.json": {
                 "build_path": "${workspaceFolder}/docs/_build",
                 "docs_root": "${workspaceFolder}/docs",
+                "pythonPath": "${workspaceFolder}/.venv/bin/python",
             }
         }
 
