@@ -8,6 +8,8 @@ Process to install needls:
     @startuml
     start
 
+    :Trigger\n 1. open-needs-ide.load\n 2. open .rst file;
+
     :Check needls.pythonPath specified in workspace setting;
 
     if (needls.pythonPath specified and valid?) then (no)
@@ -23,7 +25,6 @@ Process to install needls:
 
             endif
 
-        backward:Prompt inputbox again;
         repeat while (valid?) is (no)
         ->yes;
 
