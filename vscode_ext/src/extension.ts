@@ -73,16 +73,14 @@ async function checkPythonPath(pythonPath: string, outChannel: OutputChannel): P
 			ignoreFocusOut: true,
 		});
 
-		// use default python if no input from user
 		if (user_input_pythonPath) {
 			pythonPath = user_input_pythonPath
 			window.showInformationMessage(`${log_prefix} using specified python path ${user_input_pythonPath}`);
+			console.log(`${log_prefix} Python path configured!`);
 		} else {
-			pythonPath = default_pythonPath
-			window.showInformationMessage(`${log_prefix} using default system python path ${default_pythonPath}`);
+			// User cancled to specify python path, stop activating extension
+			throw new Error(`${log_prefix} Python path not specified.`);
 		}
-
-		console.log(`${log_prefix} Python path configured!`);
 	}
 
 	return pythonPath

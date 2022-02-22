@@ -81,6 +81,7 @@ Content
 .. toctree::
    :maxdepth: 2
 
+   arch
    installation
    settings
    features
