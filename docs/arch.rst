@@ -1,6 +1,8 @@
 Installation routine
 ====================
 
+Process to install needls:
+
 .. uml::
 
     @startuml
@@ -24,6 +26,19 @@ Installation routine
         backward:Prompt inputbox again;
         repeat while (valid?) is (no)
         ->yes;
+
+    else (yes)
+
+    endif
+
+    :Use specified valid pythonPath to install needls;
+    if (needls installed?) then (no)
+        #yellowgreen:install needls;
+        if (user confirm?) then (yes)
+            :needls install success;
+        else (no)
+            end
+        endif
 
     else (yes)
 
