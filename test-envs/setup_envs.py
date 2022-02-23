@@ -23,9 +23,9 @@ class ProjectEnv:
 
         self.test_envs_path = os.path.join(os.path.dirname(__file__))
         self.basics_path = os.path.join(self.test_envs_path, "_basics")
-        
+
         self.temp_env_path = os.path.join(self.test_envs_path, "../temp-envs")
-        
+
         self.env_path = os.path.join(self.temp_env_path, name)
 
     def setup(self):
@@ -75,6 +75,7 @@ class ProjectEnv:
             ".vscode/settings.json": {
                 "build_path": "${workspaceFolder}/docs/_build",
                 "docs_root": "${workspaceFolder}/docs",
+                "pythonPath": "",
             }
         }
 
@@ -99,6 +100,9 @@ class ProjectEnv:
 def start():
     project1 = ProjectEnv("project_no_needls", reuse=True)
     project1.setup()
+
+    project2 = ProjectEnv("project_dummy_needls_test", reuse=True)
+    project2.setup()
 
 
 if "main" in __name__:

@@ -10,7 +10,7 @@
 		"url": "https://github.com/open-needs/open-needs-ide.git"
 	},
 	"homepage": "https://open-needs.org/open-needs-ide/",
-	"version": "0.0.14",
+	"version": "0.0.15",
 	"engines": {
 		"vscode": "^1.52.0"
 	},
@@ -68,6 +68,10 @@
 					"type": "string",
 					"default": "/build",
 					"description": "Sphinx build directory. This is an absolute path!"
+				},
+				"needls.pythonPath": {
+					"type": "string",
+					"description": "Python path configured by the user. This is an absolute path!"
 				}
 			}
 		}

@@ -14,6 +14,7 @@ with open(ver_path) as ver_file:
 
 setup(
     name="open-needs-ls",
+    # Don't forget package.json, changelog and needls.version
     version=main_ns["__version__"],
     url="https://open-needs.org",
     author="Daniel Woste",

@@ -35,6 +35,18 @@
             "preLaunchTask": "${defaultBuildTask}"
           },
           {
+            "name": "Launch Extension Dummy",
+            "type": "extensionHost",
+            "request": "launch",
+            "args": [
+                //"--disable-extensions",
+                "--extensionDevelopmentPath=${workspaceFolder}/vscode_ext",
+                "${workspaceFolder}/temp-envs/project_dummy_needls_test",
+            ],
+            "outFiles": ["${workspaceFolder}/out/test_dummy/**/*.js"],
+            "preLaunchTask": "${defaultBuildTask}"
+          },
+          {
             "name": "Setup Envs",
             "type": "python",
             "request": "launch",
