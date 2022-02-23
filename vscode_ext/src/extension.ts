@@ -152,6 +152,21 @@ async function checkForNeedls(pythonPath: string, outChannel: OutputChannel, ext
 		outChannel.appendLine(e);
 		return false
 	}
+
+
+	try {
+		await exec_py(
+			pythonPath,
+			outChannel,
+			'-c',
+			'"import needls.server"'
+		);
+	} catch (e) {
+		console.warn(e)
+		outChannel.appendLine(e);
+		return false
+	}
+
 	return true;
 }
 
