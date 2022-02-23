@@ -29,9 +29,16 @@ import { exec, ExecException } from 'child_process';
 let client: LanguageClient;
 const log_prefix = "Extension Open-Needs: ";
 
-async function getPythonPath(pythonPath:string, outChannel: OutputChannel): Promise<string> {
+async function checkAndValidatePythonPath(pythonPath:string, outChannel: OutputChannel): Promise<string> {
 	// check pythonPath if empty, ask user to config; if not, use the pythonPath from workspace setting
-	pythonPath = await checkPythonPath(pythonPath, outChannel);
+	if (!pythonPath) {
+		pythonPath = await getUserInputPythonPath(pythonPath, outChannel);
+
+		// user does not specify python path
+		if (pythonPath === undefined) {
+			return pythonPath
+		}
+	}
 
 	const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
 	pythonPath = pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
@@ -45,42 +52,39 @@ async function getPythonPath(pythonPath:string, outChannel: OutputChannel): Prom
 		window.showInformationMessage(`${log_prefix} used python path ${pythonPath} not existed ${error}`);
 
 		// ask user again until got valid python path
-		return getPythonPath("", outChannel)
+		return checkAndValidatePythonPath("", outChannel)
 	}
 
 	return pythonPath
 }
 
-async function checkPythonPath(pythonPath: string, outChannel: OutputChannel): Promise<string> {
-	// check if pythonPath empty
-	if (!pythonPath) {
-		console.log(`${log_prefix} Python path not configured yet!`);
-		window.showInformationMessage(`${log_prefix} Python path not configured yet!`);
+async function getUserInputPythonPath(pythonPath: string, outChannel: OutputChannel): Promise<string> {
+	console.log(`${log_prefix} Python path not configured yet!`);
+	window.showInformationMessage(`${log_prefix} please specify python path.`);
 
-		// System default python path
-		let default_pythonPath = await exec_py('python', outChannel, '-c', '"import sys; print(sys.executable)"');
+	// System default python path
+	let default_pythonPath = await exec_py('python', outChannel, '-c', '"import sys; print(sys.executable)"');
 
-		// remove line break
-		default_pythonPath = default_pythonPath.trim()
+	// remove line break
+	default_pythonPath = default_pythonPath.trim()
 
-		// TODO: it's not stable somehow, window might not pop up, if other window pops up
-		// prompting window to ask user to config
-		window.showInformationMessage(`${log_prefix} please config python path`);
-		const user_input_pythonPath = await window.showInputBox({
-			placeHolder: "Python path for Extension Open-Needs",
-			prompt: `${log_prefix} please specify python path`,
-			value: default_pythonPath,
-			ignoreFocusOut: true,
-		});
+	// TODO: it's not stable somehow, window might not pop up, if other window pops up
+	// prompting window to ask user to config
+	const user_input_pythonPath = await window.showInputBox({
+		placeHolder: "Python path for Extension Open-Needs",
+		prompt: "Example: ${workspaceFolder}/.venv/bin/python",
+		value: default_pythonPath,
+		ignoreFocusOut: true,
+	});
 
-		if (user_input_pythonPath) {
-			pythonPath = user_input_pythonPath
-			window.showInformationMessage(`${log_prefix} using specified python path ${user_input_pythonPath}`);
-			console.log(`${log_prefix} Python path configured!`);
-		} else {
-			// User cancled to specify python path, stop activating extension
-			throw new Error(`${log_prefix} Python path not specified.`);
-		}
+	if (user_input_pythonPath) {
+		pythonPath = user_input_pythonPath
+		window.showInformationMessage(`${log_prefix} using specified python path ${user_input_pythonPath}`);
+		console.log(`${log_prefix} Python path configured!`);
+	} else {
+		// User cancled to specify python path, stop activating extension
+		// throw new Error(`${log_prefix} Python path not specified.`);
+		pythonPath = undefined
 	}
 
 	return pythonPath
@@ -256,7 +260,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	// get pythonPath from workspace setting
 	const wk_pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
 
-	const pythonPath = await getPythonPath(wk_pythonPath, outChannel);
+	const pythonPath = await checkAndValidatePythonPath(wk_pythonPath, outChannel);
 	outChannel.appendLine("Python path: " + pythonPath);
 
 	// Check for needls

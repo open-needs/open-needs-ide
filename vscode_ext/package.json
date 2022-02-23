@@ -71,7 +71,6 @@
 				},
 				"needls.pythonPath": {
 					"type": "string",
-					"default": "SystemDefaultPython",
 					"description": "Python path configured by the user. This is an absolute path!"
 				}
 			}
