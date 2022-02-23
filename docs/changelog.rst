@@ -1,12 +1,18 @@
 Changelog
 =========
 
-0.0.15
+0.0.16
 ------
 
 **released**: under development
 
+0.0.15
+------
+
+**released**: 23.02.2022
+
 * Improvement: Supporting ``pythonPath`` config in settings of Open-Needs IDE. Default is system python path. :issue:`38`
+* Bugfix: Mutliple little changes
 
 
 0.0.14
