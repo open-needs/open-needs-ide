@@ -74,7 +74,6 @@ async function checkAndValidatePythonPath(pythonPath:string, outChannel: OutputC
 }
 
 async function getUserInputPythonPath(pythonPathProposal: string, outChannel: OutputChannel): Promise<string> {
-	// ToDo: Ask user for pythonPath, check via checkAndValidatePythonPath(pythonPath), if not ask again --> Return valid pathon path
 	window.showInformationMessage(`${log_prefix} please specify python path.`);
 
 	let pythonPath = ""
@@ -89,9 +88,17 @@ async function getUserInputPythonPath(pythonPathProposal: string, outChannel: Ou
 
 		if (user_input_pythonPath) {
 			pythonPath = user_input_pythonPath
+
+			// update pythonPathProposal for inputbox
+			pythonPathProposal = pythonPath
+
 			const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
 			pythonPath = pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
-		} 
+		} else {
+			// user canceled
+			pythonPath = undefined
+			break;
+		}
 	}
 
 	return pythonPath
@@ -216,7 +223,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	const cwd = path.join(__dirname, "..", "..");
 	outChannel.appendLine("CWD: " + cwd);
 
-
 	//
 	// PYTHON PATH AND USER CONF HANDLING
 	//
@@ -225,10 +231,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	let wk_pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
 	const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
 	wk_pythonPath = wk_pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
-    
+
 	let pythonPath = ""
 	if (wk_pythonPath == "") {
-		const sysPythonPath = await exec_py('python', outChannel, '-c', '"import sys; print(sys.executable)"');
+		let sysPythonPath = await exec_py('python', outChannel, '-c', '"import sys; print(sys.executable)"');
+		sysPythonPath = sysPythonPath.trim();
 		pythonPath = await getUserInputPythonPath(sysPythonPath, outChannel);
 	}else if (!checkAndValidatePythonPath(wk_pythonPath, outChannel)){
 		pythonPath = await getUserInputPythonPath(wk_pythonPath, outChannel);
@@ -236,20 +243,19 @@ export async function activate(context: ExtensionContext): Promise<void> {
 		pythonPath = wk_pythonPath
 	}
 
-	outChannel.appendLine("Python path: " + pythonPath);
-
 	if (pythonPath === undefined) {
-		window.showErrorMessage("Python path not given. Extension can not be laoded.");
+		window.showErrorMessage(`Python path not given. ${log_prefix} can not be loaded.`);
 		return 
 	}
+
+	outChannel.appendLine("Python path: " + pythonPath);
 
 	// update pythonPath for workspace setting
 	workspace.getConfiguration('needls').update('pythonPath', pythonPath, false);
 
-
 	// Check for needls
 	let needls_installed = await checkForNeedls(pythonPath, outChannel, ext_version);
-	
+
 	// Ask for needls installation
 	if ( !needls_installed ) {
 		window.showWarningMessage("Invalid Open-Needs Server installation. Please reinstall...");
@@ -279,7 +285,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 		window.showErrorMessage("Python module needls not found! Needs extension can't start.");
 	}
 
-	//}
+	//
 	// REGISTER INTERNAL HANDLERS 
 	//
 
@@ -310,7 +316,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 			options: { cwd: cwd }
 		} as Executable
 	};
-	// let default_pythonPath = await exec_py('python', outChannel, '-c', '"import sys; print(sys.executable)"');
+
 	// Options to control the language client
 	const clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
@@ -324,23 +330,21 @@ export async function activate(context: ExtensionContext): Promise<void> {
 		}
 	};
 
-	
-		// Create the language client and start the client.
-		client = new LanguageClient(
-			'open-needs-ls',
-			'Open-Needs LS',
-			serverOptions,
-			clientOptions
-		);
+	// Create the language client and start the client.
+	client = new LanguageClient(
+		'open-needs-ls',
+		'Open-Needs LS',
+		serverOptions,
+		clientOptions
+	);
 
-		// Start the client. This will also launch the server
-		client.start();
+	// Start the client. This will also launch the server
+	client.start();
 
-		// set doc root and needs.json file
-		client.onReady().then(async () => {
-			await read_settings(outChannel);
-		})
-	
+	// set doc root and needs.json file
+	client.onReady().then(async () => {
+		await read_settings(outChannel);
+	})
 }
 
 export function deactivate(): Thenable<void> | undefined {
