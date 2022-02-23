@@ -29,66 +29,6 @@ import { exec, ExecException } from 'child_process';
 let client: LanguageClient;
 const log_prefix = "Extension Open-Needs: ";
 
-async function checkAndValidatePythonPath(pythonPath:string, outChannel: OutputChannel): Promise<string> {
-	// check pythonPath if empty, ask user to config; if not, use the pythonPath from workspace setting
-	if (!pythonPath) {
-		pythonPath = await getUserInputPythonPath(pythonPath, outChannel);
-
-		// user does not specify python path
-		if (pythonPath === undefined) {
-			return pythonPath
-		}
-	}
-
-	const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
-	pythonPath = pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
-
-	// check if pythonPath exists: run cmd to check python version to confirm
-	try {
-		await exec_py(pythonPath, outChannel, '--version');
-	} catch (error) {
-		console.log(error)
-		outChannel.appendLine(error);
-		window.showInformationMessage(`${log_prefix} used python path ${pythonPath} not existed ${error}`);
-
-		// ask user again until got valid python path
-		return checkAndValidatePythonPath("", outChannel)
-	}
-
-	return pythonPath
-}
-
-async function getUserInputPythonPath(pythonPath: string, outChannel: OutputChannel): Promise<string> {
-	console.log(`${log_prefix} Python path not configured yet!`);
-	window.showInformationMessage(`${log_prefix} please specify python path.`);
-
-	// System default python path
-	let default_pythonPath = await exec_py('python', outChannel, '-c', '"import sys; print(sys.executable)"');
-
-	// remove line break
-	default_pythonPath = default_pythonPath.trim()
-
-	// TODO: it's not stable somehow, window might not pop up, if other window pops up
-	// prompting window to ask user to config
-	const user_input_pythonPath = await window.showInputBox({
-		placeHolder: "Python path for Extension Open-Needs",
-		prompt: "Example: ${workspaceFolder}/.venv/bin/python",
-		value: default_pythonPath,
-		ignoreFocusOut: true,
-	});
-
-	if (user_input_pythonPath) {
-		pythonPath = user_input_pythonPath
-		window.showInformationMessage(`${log_prefix} using specified python path ${user_input_pythonPath}`);
-		console.log(`${log_prefix} Python path configured!`);
-	} else {
-		// User cancled to specify python path, stop activating extension
-		// throw new Error(`${log_prefix} Python path not specified.`);
-		pythonPath = undefined
-	}
-
-	return pythonPath
-}
 
 function exec_py(pythonPath: string, outChannel: OutputChannel, ...args: string[]): Promise<string> {
 	const cmd = [pythonPath, ...args];
@@ -116,54 +56,76 @@ function exec_py(pythonPath: string, outChannel: OutputChannel, ...args: string[
 	});
 }
 
-async function installNeedls(pythonPath: string, outChannel: OutputChannel, version: string): Promise<boolean> {
-	const install = await window.showInformationMessage(
-			`Install needls==${version} from PyPI?`,
-			'Yes',
-			'No'
-		).then( (item) => {
-		if ( item === 'Yes' ) {
-			return true;
-		} else {
-			return false
-		}
-	});
-	if (install === true) {
-		try {
-			await exec_py(
-				pythonPath,
-				outChannel,
-				'-m',
-				'pip',
-				'install',
-				'pip',
-				'--upgrade'
-			);
-			await exec_py(
-				pythonPath,
-				outChannel,
-				'-m',
-				'pip',
-				'uninstall',
-				'open-needs-ls',
-				'-y'
-			);
-			await exec_py(
-				pythonPath,
-				outChannel,
-				'-m',
-				'pip',
-				'install',
-				`open-needs-ls==${version}`
-			);
-			window.showInformationMessage("Needls successfully installed.");
-			return true;
-		} catch (e){
-			console.log(e)
-			window.showInformationMessage(`Needls could not be installed ${e}`);
-		}
+async function checkAndValidatePythonPath(pythonPath:string, outChannel: OutputChannel): Promise<boolean> {
+	// check pythonPath if empty, ask user to config; if not, use the pythonPath from workspace setting
+	if (!pythonPath) {
+		return false
 	}
-	return false
+	// check if pythonPath exists: run cmd to check python version to confirm
+	try {
+		await exec_py(pythonPath, outChannel, '--version');
+	} catch (error) {
+		console.log(error)
+		outChannel.appendLine(error);
+
+		return false
+	}
+	return true
+}
+
+async function getUserInputPythonPath(pythonPathProposal: string, outChannel: OutputChannel): Promise<string> {
+	// ToDo: Ask user for pythonPath, check via checkAndValidatePythonPath(pythonPath), if not ask again --> Return valid pathon path
+	window.showInformationMessage(`${log_prefix} please specify python path.`);
+
+	let pythonPath = ""
+	while(await checkAndValidatePythonPath(pythonPath, outChannel) == false) {
+		// prompting window to ask user to config
+		const user_input_pythonPath = await window.showInputBox({
+			placeHolder: "Python path for Extension Open-Needs",
+			prompt: "Example: ${workspaceFolder}/.venv/bin/python",
+			value: pythonPathProposal,
+			ignoreFocusOut: true,
+		});
+
+		if (user_input_pythonPath) {
+			pythonPath = user_input_pythonPath
+			const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
+			pythonPath = pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
+		} 
+	}
+
+	return pythonPath
+}
+
+async function installNeedls(pythonPath: string, outChannel: OutputChannel, version: string): Promise<boolean> {
+	await exec_py(
+		pythonPath,
+		outChannel,
+		'-m',
+		'pip',
+		'install',
+		'pip',
+		'--upgrade'
+	);
+	await exec_py(
+		pythonPath,
+		outChannel,
+		'-m',
+		'pip',
+		'uninstall',
+		'open-needs-ls',
+		'-y'
+	);
+	await exec_py(
+		pythonPath,
+		outChannel,
+		'-m',
+		'pip',
+		'install',
+		`open-needs-ls==${version}`
+	);
+	window.showInformationMessage("Needls successfully installed.");
+	return true;
 }
 
 async function checkForNeedls(pythonPath: string, outChannel: OutputChannel, ext_version: string): Promise<boolean> {
@@ -176,17 +138,14 @@ async function checkForNeedls(pythonPath: string, outChannel: OutputChannel, ext
 		);
 		needls_version = needls_version.trim();
 		if (ext_version != needls_version) {
-			window.showWarningMessage(`Needls found but wrong version: ${needls_version}\nVersion needed: ${ext_version}. 
-			Needls should be reinstalled`);
 			return false;
 		}
-		return true;
 	} catch (e) {
 		console.warn(e)
 		outChannel.appendLine(e);
-		window.showWarningMessage(`Error during detecting needls. Needls should be reinstalled.`);
 		return false
 	}
+	return true;
 }
 
 async function read_settings(_outChannel: OutputChannel) {
@@ -251,30 +210,78 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	});
 	context.subscriptions.push(disposable);
 	
-	//Create output channel for logging
+	//Create oversionutput channel for logging
 	const outChannel = window.createOutputChannel("Open-Needs IDE");
 
 	const cwd = path.join(__dirname, "..", "..");
 	outChannel.appendLine("CWD: " + cwd);
 
-	// get pythonPath from workspace setting
-	const wk_pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
 
-	const pythonPath = await checkAndValidatePythonPath(wk_pythonPath, outChannel);
+	//
+	// PYTHON PATH AND USER CONF HANDLING
+	//
+
+	// get pythonPath from workspace setting
+	let wk_pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
+	const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
+	wk_pythonPath = wk_pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
+    
+	let pythonPath = ""
+	if (wk_pythonPath == "") {
+		const sysPythonPath = await exec_py('python', outChannel, '-c', '"import sys; print(sys.executable)"');
+		pythonPath = await getUserInputPythonPath(sysPythonPath, outChannel);
+	}else if (!checkAndValidatePythonPath(wk_pythonPath, outChannel)){
+		pythonPath = await getUserInputPythonPath(wk_pythonPath, outChannel);
+	}else{
+		pythonPath = wk_pythonPath
+	}
+
 	outChannel.appendLine("Python path: " + pythonPath);
+
+	if (pythonPath === undefined) {
+		window.showErrorMessage("Python path not given. Extension can not be laoded.");
+		return 
+	}
+
+	// update pythonPath for workspace setting
+	workspace.getConfiguration('needls').update('pythonPath', pythonPath, false);
+
 
 	// Check for needls
 	let needls_installed = await checkForNeedls(pythonPath, outChannel, ext_version);
+	
+	// Ask for needls installation
 	if ( !needls_installed ) {
-		needls_installed = await installNeedls(pythonPath, outChannel, ext_version);
+		window.showWarningMessage("Invalid Open-Needs Server installation. Please reinstall...");
+		const install = await window.showInformationMessage(
+			`Install needls==${ext_version} from PyPI?`,
+			'Yes',
+			'No'
+		).then( (item) => {
+		if ( item === 'Yes' ) {
+			return true;
+		} else {
+			return false
+		}
+		});
+		if (install) {
+			try {
+				needls_installed = await installNeedls(pythonPath, outChannel, ext_version);
+			} catch (e){
+				console.log(e)
+				window.showInformationMessage(`Needls could not be installed. Error: ${e}`);
+				return
+			}
+		}
 	}
 
 	if ( !needls_installed ) {
 		window.showErrorMessage("Python module needls not found! Needs extension can't start.");
 	}
 
-	// update pythonPath for workspace setting
-	workspace.getConfiguration('needls').update('pythonPath', pythonPath, false);
+	//}
+	// REGISTER INTERNAL HANDLERS 
+	//
 
 	// listen for changes of settings
 	workspace.onDidChangeConfiguration( (_event) => {
@@ -303,7 +310,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 			options: { cwd: cwd }
 		} as Executable
 	};
-
+	// let default_pythonPath = await exec_py('python', outChannel, '-c', '"import sys; print(sys.executable)"');
 	// Options to control the language client
 	const clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
@@ -317,7 +324,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 		}
 	};
 
-	if (pythonPath) {
+	
 		// Create the language client and start the client.
 		client = new LanguageClient(
 			'open-needs-ls',
@@ -333,10 +340,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 		client.onReady().then(async () => {
 			await read_settings(outChannel);
 		})
-	} else {
-		window.showErrorMessage("Python not found! Can't activate extension.");
-		outChannel.appendLine("Python not found! Can't activate extension.");
-	}
+	
 }
 
 export function deactivate(): Thenable<void> | undefined {
@@ -345,3 +349,4 @@ export function deactivate(): Thenable<void> | undefined {
 	}
 	return client.stop();
 }
+
