@@ -248,8 +248,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	wk_pythonPath = wk_pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 
 	let pythonPath = ""
+	let sysPythonPath = ""
 	if (wk_pythonPath == "") {
-		let sysPythonPath = await exec_py('python', outChannel, '-c', '"import sys; print(sys.executable)"');
+		try {
+			sysPythonPath = await exec_py('python', outChannel, '-c', '"import sys; print(sys.executable)"');
+		} catch {
+			sysPythonPath = await exec_py('python3', outChannel, '-c', '"import sys; print(sys.executable)"');
+		}
 		sysPythonPath = sysPythonPath.trim();
 		pythonPath = await getUserInputPythonPath(sysPythonPath, outChannel);
 	}else if (!checkAndValidatePythonPath(wk_pythonPath, outChannel)){
