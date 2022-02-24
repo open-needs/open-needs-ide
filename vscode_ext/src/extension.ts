@@ -63,6 +63,8 @@ async function checkAndValidatePythonPath(pythonPath:string, outChannel: OutputC
 	}
 	// check if pythonPath exists: run cmd to check python version to confirm
 	try {
+		const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
+		pythonPath = pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 		await exec_py(pythonPath, outChannel, '--version');
 	} catch (error) {
 		console.log(error)
@@ -91,9 +93,6 @@ async function getUserInputPythonPath(pythonPathProposal: string, outChannel: Ou
 
 			// update pythonPathProposal for inputbox
 			pythonPathProposal = pythonPath
-
-			const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
-			pythonPath = pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 		} else {
 			// user canceled
 			pythonPath = undefined
@@ -243,9 +242,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	//
 
 	// get pythonPath from workspace setting
-	let wk_pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
-	const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
-	wk_pythonPath = wk_pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
+	const wk_pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
 
 	let pythonPath = ""
 	let sysPythonPath = ""
@@ -272,6 +269,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
 	// update pythonPath for workspace setting
 	workspace.getConfiguration('needls').update('pythonPath', pythonPath, false);
+
+	const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
+	pythonPath = pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 
 	// Check for needls
 	let needls_installed = await checkForNeedls(pythonPath, outChannel, ext_version);
