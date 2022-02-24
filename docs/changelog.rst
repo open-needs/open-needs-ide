@@ -6,6 +6,9 @@ Changelog
 
 **released**: under development
 
+* Bugfix: Fixed system python version compatiable. :issue:`42`
+
+
 0.0.15
 ------
 
