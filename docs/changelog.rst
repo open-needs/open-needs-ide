@@ -7,6 +7,7 @@ Changelog
 **released**: under development
 
 * Bugfix: Fixed system python version compatiable. :issue:`42`
+* Bugfix: Fixed pythonPath from user input saved correctly in workspace setting. :issue:`45`
 
 
 0.0.15
