@@ -24,7 +24,7 @@ class ProjectEnv:
         self.test_envs_path = os.path.join(os.path.dirname(__file__))
         self.basics_path = os.path.join(self.test_envs_path, "_basics")
 
-        self.temp_env_path = os.path.join(self.test_envs_path, "../temp-envs")
+        self.temp_env_path = os.path.join(self.test_envs_path, "..\\temp-envs")
 
         self.env_path = os.path.join(self.temp_env_path, name)
 
@@ -57,7 +57,7 @@ class ProjectEnv:
         subprocess.call(venv_command)
         print("python venv installed")
 
-        dep_command = [".venv/bin/pip", "install", "-r", "py-requirements.txt"]
+        dep_command = [".venv\\bin\\pip", "install", "-r", "py-requirements.txt"]
         subprocess.call(dep_command)
         print("python dependecies installed")
 
@@ -72,9 +72,9 @@ class ProjectEnv:
         build_folder = os.path.join(self.env_path, "docs", "_build")
 
         templates = {
-            ".vscode/settings.json": {
-                "build_path": "${workspaceFolder}/docs/_build",
-                "docs_root": "${workspaceFolder}/docs",
+            ".vscode\\settings.json": {
+                "build_path": "${workspaceFolder}\\docs\\_build",
+                "docs_root": "${workspaceFolder}\\docs",
                 "pythonPath": "",
             }
         }
