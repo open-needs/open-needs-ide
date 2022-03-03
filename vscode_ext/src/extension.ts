@@ -198,6 +198,9 @@ async function make_needs(pythonPath: string, outChannel: OutputChannel) {
 	source_dir = source_dir.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 	build_dir = build_dir.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 
+	// location of created needs.json
+	const needs_json_dir = path.join(build_dir, "needs")
+
 	if (source_dir) {
 		// run sphinx build: python -m sphinx.cmd.build source_dir build_dir
 		await exec_py(
@@ -207,7 +210,7 @@ async function make_needs(pythonPath: string, outChannel: OutputChannel) {
 			'sphinx.cmd.build',
 			'-b needs',
 			source_dir,
-			build_dir
+			needs_json_dir
 		);
 	}
 }
@@ -363,7 +366,20 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
 	// set doc root and needs.json file
 	client.onReady().then(async () => {
-		await read_settings(outChannel);
+		// get buildPath from workspace setting
+		let wk_buildPath = workspace.getConfiguration('needls').get('buildPath').toString();
+		const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
+		wk_buildPath = wk_buildPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
+
+		// check if needs.json exists, if not, create one
+		const needs_json_path = path.join(wk_buildPath, 'needs', 'needs.json')
+		if (fs.existsSync(needs_json_path)) {
+			await read_settings(outChannel);
+		} else {
+			make_needs(pythonPath, outChannel).then( () => {
+				read_settings(outChannel); // trigger load needs.json in needls
+			});
+		}
 	})
 }
 
