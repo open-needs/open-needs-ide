@@ -179,7 +179,7 @@ async function read_settings(_outChannel: OutputChannel) {
 	docs_root = docs_root.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 	build_path = build_path.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 	pythonPath = pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
-
+	
 	commands.executeCommand('needls.update_settings', docs_root, build_path, pythonPath);
 }
 
@@ -242,7 +242,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	//
 
 	// get pythonPath from workspace setting
-	const wk_pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
+	let wk_pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
+	wk_pythonPath = wk_pythonPath.replace(/\//g,path.sep)
+	wk_pythonPath = wk_pythonPath.replace(/\\/g,path.sep)
 
 	let pythonPath = ""
 	let sysPythonPath = ""
