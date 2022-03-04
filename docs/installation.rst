@@ -24,7 +24,7 @@ Installation of the extension
    #. Update the **Build Path**. E.g. ``/home/my-user/my-project/docs/_build/need``.
    #. Update the **Docs Root**. E.g. ``/home/my-user/my-project/docs``
    #. Update the **pythonPath**. E.g. ``/home/my-user/my-project/.venv/bin/python``. Default system python path is ``/usr/bin/python``.
-   Note, under Windows the default python path for a virtual environment is ``${workspaceFolder}/.venv/Scripts``. 
+      Note, under Windows the default python path for a virtual environment is ``${workspaceFolder}/.venv/Scripts``. 
 
 
 #. Open a reStructuredText file (`*.rst`) in workspace to trigger the activation of the extension.
