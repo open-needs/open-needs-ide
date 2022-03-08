@@ -334,9 +334,12 @@ def completions(ls, params: CompletionParams = None):
     if not ls.needs_store.needs_initialized:
         return []
 
-    lines, word = get_lines_and_word(ls, params)
-    line_number = params.position[0]
-    line = lines[line_number]
+    try:
+        lines, word = get_lines_and_word(ls, params)
+        line_number = params.position[0]
+        line = lines[line_number]
+    except IndexError:
+        return []
 
     if word.startswith("->") or word.startswith(":need:`->"):
         new_word = word.replace(":need:`->", "->")
