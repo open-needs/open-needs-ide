@@ -4,6 +4,7 @@
 # --------------------------------------------------------------------------
 
 import importlib.util
+import logging
 import json
 import os
 import sys
@@ -42,12 +43,22 @@ class NeedsStore:
         module_name = "conf"
         work_dir = os.getcwd()
         os.chdir(self.docs_root)
+
+        logging.info("Loading need_types from conf.py...")
+
         spec = importlib.util.spec_from_file_location(
             module_name, os.path.join(self.docs_root, "conf.py")
         )
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[module_name] = module
-        spec.loader.exec_module(module)
+        if spec is not None:
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[module_name] = module
+            try:
+                spec.loader.exec_module(module)
+            except Exception as e:
+                logging.error(f"Failed to exccute module {module} -> {e}")
+        else:
+            raise ValueError(f"Created module spec {spec} from conf.py not exists.")
+
         need_types = getattr(module, "needs_types", [])
         if not need_types:
             raise NeedlsConfigException("No 'need_types' defined on conf.py")
