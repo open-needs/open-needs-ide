@@ -36,7 +36,7 @@ class NeedsStore:
 
     def set_docs_root(self, docs_root: str) -> None:
         if not os.path.exists(docs_root):
-            raise ValueError(f"Docs root directory not found: {docs_root}")
+            raise FileNotFoundError(f"Docs root directory not found: {docs_root}")
         self.docs_root = docs_root
 
     def set_declared_types(self) -> None:
@@ -57,7 +57,7 @@ class NeedsStore:
             except Exception as e:
                 logging.error(f"Failed to exccute module {module} -> {e}")
         else:
-            raise ValueError(f"Created module spec {spec} from conf.py not exists.")
+            raise ImportError(f"Created module spec {spec} from conf.py not exists.")
 
         need_types = getattr(module, "needs_types", [])
         if not need_types:
@@ -76,7 +76,7 @@ class NeedsStore:
         self.needs = {}
 
         if not os.path.exists(json_file):
-            raise ValueError(f"JSON file not found: {json_file}")
+            raise FileNotFoundError(f"JSON file not found: {json_file}")
 
         with open(json_file, encoding="utf-8") as file:
             needs_json = json.load(file)

@@ -494,8 +494,8 @@ def update_settings(ls, *args):
     ls.show_message_log(f"Needs file: {needs_file}")
     try:
         ls.needs_store.set_docs_root(docs_root)
-    except ValueError:
-        ls.show_message_log(f"Something wrong with Docs root: {docs_root}")
+    except Exception as e:
+        ls.show_message_log(f"Something is wrong with Docs root: {docs_root} -> {e}")
         ls.show_message(
             "Error setting document root! Are your settings correct?",
             msg_type=MessageType.Error,
@@ -505,9 +505,9 @@ def update_settings(ls, *args):
     try:
         ls.needs_store.set_declared_types()
         ls.show_message_log(f"Declared need types: {ls.needs_store.declared_types}")
-    except ValueError:
+    except Exception as e:
         ls.show_message_log(
-            f"Something wrong with declared need types: {ls.needs_store.declared_types}"
+            f"Something is wrong with declared need types: {ls.needs_store.declared_types} -> {e}"
         )
         ls.show_message(
             "Error loading declared needs_types from conf.py",
@@ -518,13 +518,11 @@ def update_settings(ls, *args):
     try:
         ls.needs_store.load_needs(needs_file)
         # for debugging
-        needs_keys = []
-        for need in ls.needs_store.needs.keys():
-            needs_keys.append(need)
         ls.show_message_log(
-            f"Loaded {len(ls.needs_store.needs)} needs: {needs_keys} from found needs.json"
+            f"Loaded {len(ls.needs_store.needs)} needs from needs.json: {list(ls.needs_store.needs.keys())}"
         )
-    except ValueError:
+    except Exception as e:
+        ls.show_message_log(f"Failed to load needs.json: {needs_file} -> {e}")
         ls.show_message(
             "Error loading needs.json! Are your settings correct?",
             msg_type=MessageType.Error,
