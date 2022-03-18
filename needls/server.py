@@ -340,7 +340,7 @@ def completions(ls, params: CompletionParams = None):
         line = lines[line_number]
     except IndexError:
         # vs code has default keyboard shortcuts for trigger suggest: ctrl + space,
-        # if user use this shortcut will trigger completion, if used at a empty line, 
+        # if user use this shortcut will trigger completion, if used at a empty line,
         # then the function above to get lines and words will throw out of index error,
         # hence, this exception here is needed.
         return []
