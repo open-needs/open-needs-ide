@@ -4,6 +4,7 @@
 # --------------------------------------------------------------------------
 
 import importlib.util
+import logging
 import json
 import os
 import sys
@@ -35,19 +36,29 @@ class NeedsStore:
 
     def set_docs_root(self, docs_root: str) -> None:
         if not os.path.exists(docs_root):
-            raise ValueError(f"Docs root directory not found: {docs_root}")
+            raise FileNotFoundError(f"Docs root directory not found: {docs_root}")
         self.docs_root = docs_root
 
     def set_declared_types(self) -> None:
         module_name = "conf"
         work_dir = os.getcwd()
         os.chdir(self.docs_root)
+
+        logging.info("Loading need_types from conf.py...")
+
         spec = importlib.util.spec_from_file_location(
             module_name, os.path.join(self.docs_root, "conf.py")
         )
+        if spec is None:
+            raise ImportError(f"Created module spec {spec} from conf.py not exists.")
+
         module = importlib.util.module_from_spec(spec)
         sys.modules[module_name] = module
-        spec.loader.exec_module(module)
+        try:
+            spec.loader.exec_module(module)
+        except Exception as e:
+            logging.error(f"Failed to exccute module {module} -> {e}")
+
         need_types = getattr(module, "needs_types", [])
         if not need_types:
             raise NeedlsConfigException("No 'need_types' defined on conf.py")
@@ -65,7 +76,7 @@ class NeedsStore:
         self.needs = {}
 
         if not os.path.exists(json_file):
-            raise ValueError(f"JSON file not found: {json_file}")
+            raise FileNotFoundError(f"JSON file not found: {json_file}")
 
         with open(json_file, encoding="utf-8") as file:
             needs_json = json.load(file)

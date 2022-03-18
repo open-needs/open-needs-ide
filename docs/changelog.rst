@@ -9,6 +9,7 @@ Changelog
 * Bugfix: Fixed system python version compatiable. :issue:`42`
 * Bugfix: Fixed pythonPath from user input saved correctly in workspace setting. :issue:`45`
 * Bugfix: Fixed needs.json location not in sync between extension and needls and create needs.json if not exsits after extension activation. :issue:`37`
+* Improvement: Improved needls logging and exception handling. :issue:`23`
 
 
 0.0.15
