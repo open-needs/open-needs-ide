@@ -103,7 +103,10 @@ def get_lines(ls, params) -> List[str]:
 def get_word(ls, params) -> str:
     """Return the word in a line of text at a character position."""
     line_no, col = params.position
-    line = get_lines(ls, params)[line_no]
+    lines = get_lines(ls, params)
+    if line_no >= len(lines):
+        return ""
+    line = lines[line_no]
     words = line.split()
     index = col_to_word_index(col, words)
     return words[index]
@@ -334,16 +337,14 @@ def completions(ls, params: CompletionParams = None):
     if not ls.needs_store.needs_initialized:
         return []
 
-    try:
-        lines, word = get_lines_and_word(ls, params)
-        line_number = params.position[0]
-        line = lines[line_number]
-    except IndexError:
-        # vs code has default keyboard shortcuts for trigger suggest: ctrl + space,
-        # if user use this shortcut will trigger completion, if used at a empty line,
-        # then the function above to get lines and words will throw out of index error,
-        # hence, this exception here is needed.
+    lines, word = get_lines_and_word(ls, params)
+    line_number = params.position[0]
+    if line_number >= len(lines):
+        ls.show_message_log(
+            f"line {line_number} is empty, no completion trigger characters detected"
+        )
         return []
+    line = lines[line_number]
 
     if word.startswith("->") or word.startswith(":need:`->"):
         new_word = word.replace(":need:`->", "->")
