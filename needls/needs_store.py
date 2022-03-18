@@ -49,15 +49,15 @@ class NeedsStore:
         spec = importlib.util.spec_from_file_location(
             module_name, os.path.join(self.docs_root, "conf.py")
         )
-        if spec is not None:
-            module = importlib.util.module_from_spec(spec)
-            sys.modules[module_name] = module
-            try:
-                spec.loader.exec_module(module)
-            except Exception as e:
-                logging.error(f"Failed to exccute module {module} -> {e}")
-        else:
+        if spec is None:
             raise ImportError(f"Created module spec {spec} from conf.py not exists.")
+
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = module
+        try:
+            spec.loader.exec_module(module)
+        except Exception as e:
+            logging.error(f"Failed to exccute module {module} -> {e}")
 
         need_types = getattr(module, "needs_types", [])
         if not need_types:
