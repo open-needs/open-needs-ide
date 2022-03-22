@@ -11,7 +11,7 @@ Changelog
 * Bugfix: Fixed needs.json location not in sync between extension and needls and create needs.json if not exsits after extension activation. :issue:`37`
 * Improvement: Improved needls logging and exception handling. :issue:`23`
 * Bugfix: Fixed empty line trigger completion issue for vs code default shortcut trigger suggest: ctrl + space. :issue:`22`
-
+* Improvement: Updated pygls version to latest. :issue:`53`
 
 0.0.15
 ------
