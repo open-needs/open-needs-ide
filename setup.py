@@ -21,5 +21,5 @@ setup(
     author_email="daniel.woste@useblocks.com",
     description="Open-Neeeds JSON RPC server implementing Microsoft Language Server Protocol",
     packages=find_packages(),
-    install_requires=["pygls==0.9.1"],
+    install_requires=["pygls>=0.11.0"],
 )
