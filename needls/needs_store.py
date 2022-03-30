@@ -25,6 +25,7 @@ class NeedsStore:
         self.needs = {}
         self.needs_initialized = False
         self.docs_root = None
+        self.ext_conf_py_file = None
 
     def is_setup(self) -> bool:
         """Return True if database is ready for use."""
@@ -38,6 +39,13 @@ class NeedsStore:
         if not os.path.exists(docs_root):
             raise FileNotFoundError(f"Docs root directory not found: {docs_root}")
         self.docs_root = docs_root
+
+    def set_ext_conf_py_file(self, ext_conf_py_file: str) -> None:
+        if not os.path.exists(ext_conf_py_file):
+            raise FileNotFoundError(
+                f"Given extra custom {os.path.basename(ext_conf_py_file)} file not found: {ext_conf_py_file}"
+            )
+        self.ext_conf_py_file = ext_conf_py_file
 
     def set_declared_types(self) -> None:
         module_name = "conf"

@@ -497,9 +497,17 @@ def update_settings(ls, *args):
     """ """
     docs_root = args[0][0]
     needs_file = os.path.join(args[0][1], "needs", "needs.json")
+    ext_conf_py_file = args[0][3]
     ls.show_message_log("Update settings...")
     ls.show_message_log(f"Docs root: {docs_root}")
     ls.show_message_log(f"Needs file: {needs_file}")
+
+    if ext_conf_py_file:
+        ls.show_message_log(
+            f"Extra custom {os.path.basename(ext_conf_py_file)} file used: {ext_conf_py_file}"
+        )
+        ls.needs_store.set_ext_conf_py_file(ext_conf_py_file)
+
     try:
         ls.needs_store.set_docs_root(docs_root)
     except Exception as e:
@@ -536,4 +544,4 @@ def update_settings(ls, *args):
             msg_type=MessageType.Error,
         )
         return
-    ls.show_message("Using needs in: " + os.path.abspath(needs_file))
+    ls.show_message_log("Using needs in: " + os.path.abspath(needs_file))

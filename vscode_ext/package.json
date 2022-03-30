@@ -72,6 +72,10 @@
 				"needls.pythonPath": {
 					"type": "string",
 					"description": "Python path configured by the user. This is an absolute path!"
+				},
+				"needls.extConfPyPath": {
+					"type": "string",
+					"description": "Extra configurable conf.py file with different name and location. This is an absolute path!"
 				}
 			}
 		}
