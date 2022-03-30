@@ -502,12 +502,6 @@ def update_settings(ls, *args):
     ls.show_message_log(f"Docs root: {docs_root}")
     ls.show_message_log(f"Needs file: {needs_file}")
 
-    if ext_conf_py_file:
-        ls.show_message_log(
-            f"Extra custom {os.path.basename(ext_conf_py_file)} file used: {ext_conf_py_file}"
-        )
-        ls.needs_store.set_ext_conf_py_file(ext_conf_py_file)
-
     try:
         ls.needs_store.set_docs_root(docs_root)
     except Exception as e:
@@ -517,6 +511,23 @@ def update_settings(ls, *args):
             msg_type=MessageType.Error,
         )
         return
+
+    if ext_conf_py_file:
+        # Check if given extra configuration file name and location is different with conf.py
+        if ext_conf_py_file == os.path.join(docs_root, "conf.py"):
+            ls.show_message_log(
+                f"Extra Configuration Python file has the same name and path with conf.py in document root: {ext_conf_py_file}"
+            )
+            ls.show_message(
+                "Error setting extra configuration python file! Are your settings correct?",
+                msg_type=MessageType.Error,
+            )
+            return
+        else:
+            ls.show_message_log(
+                f"Extra custom {os.path.basename(ext_conf_py_file)} file used: {ext_conf_py_file}"
+            )
+            ls.needs_store.set_ext_conf_py_file(ext_conf_py_file)
 
     try:
         ls.needs_store.set_declared_types()
