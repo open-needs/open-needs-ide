@@ -2,5 +2,5 @@
     "needls.buildPath": "{{build_path}}",
     "needls.docsRoot": "{{docs_root}}",
     "needls.pythonPath": "{{pythonPath}}",
-    "needls.extConfPyPath": "{{extConfPyPath}}",
+    "needls.confPath": "{{confPath}}",
 }

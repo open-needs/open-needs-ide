@@ -11,7 +11,7 @@ This extension contributes the following settings:
 
 :needls.pythonPath: Python path used to install `Open-Needs-IDE:needls`. Default system python path `/usr/bin/python` will be used if this setting is not configured.
 
-:needls.extConfPyPath: Extra custom configuration python file like conf.py. This is an absolute path! It's optional, default is None. 
+:needls.confPath: Custom configuration file path like conf.py. This can an absolute path or relative path! It's optional, default is conf.py in document root. 
 
 Supported variables
 -------------------
@@ -31,7 +31,7 @@ Inside a ``.vscode/settings.json`` file a configuration can look like::
       "needls.docsRoot": "${workspaceFolder}/docs"
       "needls.buildPath": "${workspaceFolder}/docs/_build/need",
       "needls.pythonPath": "${workspaceFolder}/.venv/bin/python",
-      "needls.extConfPyPath": "${workspaceFolder}/docs/smaller_conf.py",
+      "needls.confPath": "${workspaceFolder}/docs/conf.py",
     }
 
 Settings menu

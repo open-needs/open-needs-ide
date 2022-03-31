@@ -497,7 +497,7 @@ def update_settings(ls, *args):
     """ """
     docs_root = args[0][0]
     needs_file = os.path.join(args[0][1], "needs", "needs.json")
-    ext_conf_py_file = args[0][3]
+
     ls.show_message_log("Update settings...")
     ls.show_message_log(f"Docs root: {docs_root}")
     ls.show_message_log(f"Needs file: {needs_file}")
@@ -512,22 +512,34 @@ def update_settings(ls, *args):
         )
         return
 
-    if ext_conf_py_file:
-        # Check if given extra configuration file name and location is different with conf.py
-        if ext_conf_py_file == os.path.join(docs_root, "conf.py"):
+    # check if config for confPath exists
+    if len(args[0]) >= 4:
+        # check if path is relative path
+        if not os.path.isabs(args[0][3]):
+            conf_py_path = os.path.join(os.getcwd(), args[0][3])
             ls.show_message_log(
-                f"Extra Configuration Python file has the same name and path with conf.py in document root: {ext_conf_py_file}"
+                f"Configuration file: relative path is given -> {args[0][3]}, need to caluculate to absolute path -> {conf_py_path}"
             )
-            ls.show_message(
-                "Error setting extra configuration python file! Are your settings correct?",
-                msg_type=MessageType.Error,
-            )
-            return
         else:
+            conf_py_path = args[0][3]
             ls.show_message_log(
-                f"Extra custom {os.path.basename(ext_conf_py_file)} file used: {ext_conf_py_file}"
+                f"Configuration file: absolute path is given -> {conf_py_path}"
             )
-            ls.needs_store.set_ext_conf_py_file(ext_conf_py_file)
+    else:
+        # using default conf.py file
+        conf_py_path = os.path.join(docs_root, "conf.py")
+
+    try:
+        ls.needs_store.set_conf_py(conf_py_path)
+    except Exception as e:
+        ls.show_message_log(
+            f"Something is wrong with configuration file: {conf_py_path} -> {e}"
+        )
+        ls.show_message(
+            "Error setting configuration file conf.py",
+            msg_type=MessageType.Error,
+        )
+        return
 
     try:
         ls.needs_store.set_declared_types()

@@ -76,7 +76,7 @@ class ProjectEnv:
                 "build_path": "${workspaceFolder}/docs/_build",
                 "docs_root": "${workspaceFolder}/docs",
                 "pythonPath": "${workspaceFolder}/.venv/bin/python",
-                "extConfPyPath": "${workspaceFolder}/docs/smaller_conf.py",
+                "confPath": "${workspaceFolder}/docs/conf.py",
             }
         }
 
