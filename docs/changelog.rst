@@ -12,7 +12,7 @@ Changelog
 * Improvement: Improved needls logging and exception handling. :issue:`23`
 * Bugfix: Fixed empty line trigger completion issue for vs code default shortcut trigger suggest: ctrl + space. :issue:`22`
 * Improvement: Support more latest pygls version and drop old version support. :issue:`53`
-* Improvement: Support extra custom configurable python file like conf.py in workspace setting. :issue:`56`
+* Improvement: Support custom configuration file like conf.py in workspace setting. :issue:`56`
 
 0.0.15
 ------
