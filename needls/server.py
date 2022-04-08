@@ -497,15 +497,46 @@ def update_settings(ls, *args):
     """ """
     docs_root = args[0][0]
     needs_file = os.path.join(args[0][1], "needs", "needs.json")
+
     ls.show_message_log("Update settings...")
     ls.show_message_log(f"Docs root: {docs_root}")
     ls.show_message_log(f"Needs file: {needs_file}")
+
     try:
         ls.needs_store.set_docs_root(docs_root)
     except Exception as e:
         ls.show_message_log(f"Something is wrong with Docs root: {docs_root} -> {e}")
         ls.show_message(
             "Error setting document root! Are your settings correct?",
+            msg_type=MessageType.Error,
+        )
+        return
+
+    # check if config for confPath exists
+    if len(args[0]) >= 4:
+        # check if path is relative path
+        if not os.path.isabs(args[0][3]):
+            conf_py_path = os.path.join(os.getcwd(), args[0][3])
+            ls.show_message_log(
+                f"Configuration file: relative path is given -> {args[0][3]}, need to caluculate to absolute path -> {conf_py_path}"
+            )
+        else:
+            conf_py_path = args[0][3]
+            ls.show_message_log(
+                f"Configuration file: absolute path is given -> {conf_py_path}"
+            )
+    else:
+        # using default conf.py file
+        conf_py_path = os.path.join(docs_root, "conf.py")
+
+    try:
+        ls.needs_store.set_conf_py(conf_py_path)
+    except Exception as e:
+        ls.show_message_log(
+            f"Something is wrong with configuration file: {conf_py_path} -> {e}"
+        )
+        ls.show_message(
+            "Error setting configuration file conf.py",
             msg_type=MessageType.Error,
         )
         return
@@ -536,4 +567,4 @@ def update_settings(ls, *args):
             msg_type=MessageType.Error,
         )
         return
-    ls.show_message("Using needs in: " + os.path.abspath(needs_file))
+    ls.show_message_log("Using needs in: " + os.path.abspath(needs_file))

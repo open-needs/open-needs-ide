@@ -25,6 +25,7 @@ class NeedsStore:
         self.needs = {}
         self.needs_initialized = False
         self.docs_root = None
+        self.conf_py_path = None
 
     def is_setup(self) -> bool:
         """Return True if database is ready for use."""
@@ -39,18 +40,28 @@ class NeedsStore:
             raise FileNotFoundError(f"Docs root directory not found: {docs_root}")
         self.docs_root = docs_root
 
+    def set_conf_py(self, conf_py_path: str) -> None:
+        if not os.path.exists(conf_py_path):
+            raise FileNotFoundError(
+                f"Given custom configuration file {conf_py_path} not found."
+            )
+        self.conf_py_path = conf_py_path
+
     def set_declared_types(self) -> None:
         module_name = "conf"
         work_dir = os.getcwd()
-        os.chdir(self.docs_root)
+        conf_py_path = self.conf_py_path
+        conf_py_dir = os.path.dirname(conf_py_path)
+        conf_py_name = os.path.basename(conf_py_path)
+        os.chdir(conf_py_dir)
 
-        logging.info("Loading need_types from conf.py...")
+        logging.info(f"Loading need_types from {conf_py_name}...")
 
-        spec = importlib.util.spec_from_file_location(
-            module_name, os.path.join(self.docs_root, "conf.py")
-        )
+        spec = importlib.util.spec_from_file_location(module_name, conf_py_path)
         if spec is None:
-            raise ImportError(f"Created module spec {spec} from conf.py not exists.")
+            raise ImportError(
+                f"Created module spec {spec} from {conf_py_name} not exists."
+            )
 
         module = importlib.util.module_from_spec(spec)
         sys.modules[module_name] = module
@@ -61,7 +72,7 @@ class NeedsStore:
 
         need_types = getattr(module, "needs_types", [])
         if not need_types:
-            raise NeedlsConfigException("No 'need_types' defined on conf.py")
+            raise NeedlsConfigException(f"No 'need_types' defined on {conf_py_name}")
 
         self.declared_types = {}
         for item in need_types:

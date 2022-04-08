@@ -173,14 +173,16 @@ async function read_settings(_outChannel: OutputChannel) {
 	let docs_root = workspace.getConfiguration('needls').get('docsRoot').toString();
 	let build_path = workspace.getConfiguration('needls').get('buildPath').toString();
 	let pythonPath = workspace.getConfiguration('needls').get('pythonPath').toString();
+	let confPath = workspace.getConfiguration('needls').get('confPath').toString();
 	
 	const currentWorkspaceFolderPath = workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri.fsPath
 
 	docs_root = docs_root.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 	build_path = build_path.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 	pythonPath = pythonPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
+	confPath = confPath.replace('${workspaceFolder}', currentWorkspaceFolderPath)
 
-	commands.executeCommand('needls.update_settings', docs_root, build_path, pythonPath);
+	commands.executeCommand('needls.update_settings', docs_root, build_path, pythonPath, confPath);
 }
 
 async function make_needs(pythonPath: string, outChannel: OutputChannel) {

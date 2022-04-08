@@ -75,7 +75,8 @@ class ProjectEnv:
             ".vscode/settings.json": {
                 "build_path": "${workspaceFolder}/docs/_build",
                 "docs_root": "${workspaceFolder}/docs",
-                "pythonPath": "",
+                "pythonPath": "${workspaceFolder}/.venv/bin/python",
+                "confPath": "${workspaceFolder}/docs/conf.py",
             }
         }
 
