@@ -24,6 +24,7 @@ Installation of the extension
    #. Update the **Build Path**. E.g. ``/home/my-user/my-project/docs/_build/need``.
    #. Update the **Docs Root**. E.g. ``/home/my-user/my-project/docs``
    #. Update the **pythonPath**. E.g. ``/home/my-user/my-project/.venv/bin/python``. Default is system python path. E.g. ``/usr/bin/python``.
+   #. Update the **confPath**. E.g. ``/home/my-user/my-project/docs/my-conf.py``. Default is conf.py in document root. E.g. ``/home/my-user/my-project/docs/conf.py``.
 
 
 #. Open a reStructuredText file (`*.rst`) in workspace to trigger the activation of the extension.
