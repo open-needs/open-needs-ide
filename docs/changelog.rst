@@ -1,10 +1,16 @@
 Changelog
 =========
 
-0.0.16
+0.0.17
 ------
 
 **released**: under development
+
+
+0.0.16
+------
+
+**released**: 25.04.2022
 
 * Bugfix: Fixed system python version compatiable. :issue:`42`
 * Bugfix: Fixed pythonPath from user input saved correctly in workspace setting. :issue:`45`

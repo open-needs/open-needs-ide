@@ -10,7 +10,7 @@
 		"url": "https://github.com/open-needs/open-needs-ide.git"
 	},
 	"homepage": "https://open-needs.org/open-needs-ide/",
-	"version": "0.0.15",
+	"version": "0.0.16",
 	"engines": {
 		"vscode": "^1.52.0"
 	},
