@@ -68,7 +68,7 @@ needs_server = NeedsLanguageServer()
 
 
 def _validate(ls, params):
-    text_doc = ls.workspace.get_document(params.textDocument.uri)
+    text_doc = ls.workspace.get_document(params.text_document.uri)
 
     source = text_doc.source
     diagnostics = _validate_sphinx(source) if source else []
@@ -96,7 +96,7 @@ def col_to_word_index(col: int, words: List[str]) -> int:
 
 def get_lines(ls, params) -> List[str]:
     """Get all text lines in the current document."""
-    text_doc = ls.workspace.get_document(params.textDocument.uri)
+    text_doc = ls.workspace.get_document(params.text_document.uri)
     source = text_doc.source
     return source.splitlines()
 
@@ -515,22 +515,32 @@ def update_settings(ls, *args):
         )
         return
 
-    # check if config for confPath exists
-    if len(args[0]) >= 4:
-        # check if path is relative path
-        if not os.path.isabs(args[0][3]):
-            conf_py_path = os.path.join(os.getcwd(), args[0][3])
-            ls.show_message_log(
-                f"Configuration file: relative path is given -> {args[0][3]}, need to caluculate to absolute path -> {conf_py_path}"
-            )
+    # using conf.py file under docsRoot by default
+    conf_py_path = os.path.join(docs_root, "conf.py")
+
+    if not os.path.exists(conf_py_path):
+        ls.show_message_log(
+            f"No conf.py under Docs root: {docs_root} found. Checking confPath setting..."
+        )
+
+        # check if given confPath not empty
+        if len(args[0]) >= 4 and args[0][3]:
+            # check if path is relative path
+            if not os.path.isabs(args[0][3]):
+                conf_py_path = os.path.join(os.getcwd(), args[0][3])
+                ls.show_message_log(
+                    f"Relative confPath is given -> {args[0][3]}, need to caluculate to absolute path -> {conf_py_path}"
+                )
+            else:
+                conf_py_path = args[0][3]
+                ls.show_message_log(f"Absolute confPath is given -> {conf_py_path}")
         else:
-            conf_py_path = args[0][3]
-            ls.show_message_log(
-                f"Configuration file: absolute path is given -> {conf_py_path}"
+            ls.show_message_log("confPath not configured.")
+            ls.show_message(
+                "No conf.py under docs root found and no confPath configured.",
+                msg_type=MessageType.Error,
             )
-    else:
-        # using default conf.py file
-        conf_py_path = os.path.join(docs_root, "conf.py")
+            return
 
     try:
         ls.needs_store.set_conf_py(conf_py_path)

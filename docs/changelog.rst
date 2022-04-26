@@ -6,6 +6,9 @@ Changelog
 
 **released**: under development
 
+* Bugfix: Adapted needls features to latest pygls API change. :issue:`59`
+* Improvement: Improved confPath setting and check.
+
 
 0.0.16
 ------
