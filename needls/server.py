@@ -15,7 +15,7 @@ import re
 from hashlib import blake2b
 from typing import List, Tuple
 
-from pygls.features import (
+from pygls.lsp.methods import (
     COMPLETION,
     COMPLETION_ITEM_RESOLVE,
     DEFINITION,
@@ -27,10 +27,11 @@ from pygls.features import (
     WORKSPACE_DID_CHANGE_CONFIGURATION,
 )
 from pygls.server import LanguageServer
-from pygls.types import (
+from pygls.lsp.types import (
     CompletionItem,
     CompletionItemKind,
     CompletionList,
+    CompletionOptions,
     CompletionParams,
     ConfigurationItem,
     ConfigurationParams,
@@ -330,7 +331,9 @@ def complete_role_or_option(ls, params, lines: List[str], word: str):
     )
 
 
-@needs_server.feature(COMPLETION, trigger_characters=[">", "/", ":", "."])
+@needs_server.feature(
+    COMPLETION, CompletionOptions(trigger_characters=[">", "/", ":", "."])
+)
 def completions(ls, params: CompletionParams = None):
     """Returns completion items."""
 
