@@ -15,7 +15,7 @@ import re
 from hashlib import blake2b
 from typing import List, Tuple
 
-from pygls.features import (
+from pygls.lsp.methods import (
     COMPLETION,
     COMPLETION_ITEM_RESOLVE,
     DEFINITION,
@@ -27,10 +27,11 @@ from pygls.features import (
     WORKSPACE_DID_CHANGE_CONFIGURATION,
 )
 from pygls.server import LanguageServer
-from pygls.types import (
+from pygls.lsp.types import (
     CompletionItem,
     CompletionItemKind,
     CompletionList,
+    CompletionOptions,
     CompletionParams,
     ConfigurationItem,
     ConfigurationParams,
@@ -67,7 +68,7 @@ needs_server = NeedsLanguageServer()
 
 
 def _validate(ls, params):
-    text_doc = ls.workspace.get_document(params.textDocument.uri)
+    text_doc = ls.workspace.get_document(params.text_document.uri)
 
     source = text_doc.source
     diagnostics = _validate_sphinx(source) if source else []
@@ -95,7 +96,7 @@ def col_to_word_index(col: int, words: List[str]) -> int:
 
 def get_lines(ls, params) -> List[str]:
     """Get all text lines in the current document."""
-    text_doc = ls.workspace.get_document(params.textDocument.uri)
+    text_doc = ls.workspace.get_document(params.text_document.uri)
     source = text_doc.source
     return source.splitlines()
 
@@ -330,7 +331,9 @@ def complete_role_or_option(ls, params, lines: List[str], word: str):
     )
 
 
-@needs_server.feature(COMPLETION, trigger_characters=[">", "/", ":", "."])
+@needs_server.feature(
+    COMPLETION, CompletionOptions(trigger_characters=[">", "/", ":", "."])
+)
 def completions(ls, params: CompletionParams = None):
     """Returns completion items."""
 
@@ -512,21 +515,24 @@ def update_settings(ls, *args):
         )
         return
 
-    # check if config for confPath exists
+    # check if confPath configured
     if len(args[0]) >= 4:
-        # check if path is relative path
-        if not os.path.isabs(args[0][3]):
-            conf_py_path = os.path.join(os.getcwd(), args[0][3])
-            ls.show_message_log(
-                f"Configuration file: relative path is given -> {args[0][3]}, need to caluculate to absolute path -> {conf_py_path}"
-            )
+        if args[0][3]:
+            # check if path is relative path
+            if not os.path.isabs(args[0][3]):
+                conf_py_path = os.path.join(os.getcwd(), args[0][3])
+                ls.show_message_log(
+                    f"Relative confPath is given -> {args[0][3]}, need to caluculate to absolute path -> {conf_py_path}"
+                )
+            else:
+                conf_py_path = args[0][3]
+                ls.show_message_log(f"Absolute confPath is given -> {conf_py_path}")
         else:
-            conf_py_path = args[0][3]
             ls.show_message_log(
-                f"Configuration file: absolute path is given -> {conf_py_path}"
+                "confPath not configured. Using default conf.py under docs root."
             )
+            conf_py_path = os.path.join(docs_root, "conf.py")
     else:
-        # using default conf.py file
         conf_py_path = os.path.join(docs_root, "conf.py")
 
     try:

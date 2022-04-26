@@ -61,12 +61,12 @@
 			"properties": {
 				"needls.docsRoot": {
 					"type": "string",
-					"default": "/sources",
+					"default": "docs",
 					"description": "Root directory of the reST sources. This is an absolute path!"
 				},
 				"needls.buildPath": {
 					"type": "string",
-					"default": "/build",
+					"default": "build",
 					"description": "Sphinx build directory. This is an absolute path!"
 				},
 				"needls.pythonPath": {
@@ -75,8 +75,7 @@
 				},
 				"needls.confPath": {
 					"type": "string",
-					"default": "/sources/conf.py",
-					"description": "Configurable conf.py file name and path. This can be an absolute or relative path!"
+					"description": "Configurable conf.py file name and path. It's optional, default is conf.py under docs root. This can be an absolute or relative path!"
 				}
 			}
 		}
