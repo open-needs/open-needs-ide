@@ -515,16 +515,9 @@ def update_settings(ls, *args):
         )
         return
 
-    # using conf.py file under docsRoot by default
-    conf_py_path = os.path.join(docs_root, "conf.py")
-
-    if not os.path.exists(conf_py_path):
-        ls.show_message_log(
-            f"No conf.py under Docs root: {docs_root} found. Checking confPath setting..."
-        )
-
-        # check if given confPath not empty
-        if len(args[0]) >= 4 and args[0][3]:
+    # check if confPath configured
+    if len(args[0]) >= 4:
+        if args[0][3]:
             # check if path is relative path
             if not os.path.isabs(args[0][3]):
                 conf_py_path = os.path.join(os.getcwd(), args[0][3])
@@ -535,12 +528,12 @@ def update_settings(ls, *args):
                 conf_py_path = args[0][3]
                 ls.show_message_log(f"Absolute confPath is given -> {conf_py_path}")
         else:
-            ls.show_message_log("confPath not configured.")
-            ls.show_message(
-                "No conf.py under docs root found and no confPath configured.",
-                msg_type=MessageType.Error,
+            ls.show_message_log(
+                "confPath not configured. Using default conf.py under docs root."
             )
-            return
+            conf_py_path = os.path.join(docs_root, "conf.py")
+    else:
+        conf_py_path = os.path.join(docs_root, "conf.py")
 
     try:
         ls.needs_store.set_conf_py(conf_py_path)
