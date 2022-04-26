@@ -1,10 +1,16 @@
 Changelog
 =========
 
-0.0.17
+0.0.18
 ------
 
 **released**: under development
+
+
+0.0.17
+------
+
+**released**: 26.04.2022
 
 * Bugfix: Adapted needls features to latest pygls API change. :issue:`59`
 * Improvement: Improved confPath setting and check.
