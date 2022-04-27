@@ -6,6 +6,8 @@ Changelog
 
 **released**: under development
 
+* Bugfix: Fixed needls features to latest pygls API and fixed type validation. :issue:`62`
+
 
 0.0.17
 ------

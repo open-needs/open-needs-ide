@@ -191,8 +191,8 @@ def complete_need_link(
     # ->req
     if word.count(">") == 1:
         return CompletionList(
-            True,
-            [
+            is_incomplete=True,
+            items=[
                 CompletionItem(label=need_type, detail="need type")
                 for need_type in ls.needs_store.types
             ],
@@ -206,8 +206,8 @@ def complete_need_link(
         requested_type = word_parts[1]  # e.g., req, test, ...
         if requested_type in ls.needs_store.types:
             return CompletionList(
-                True,
-                doc_completion_items(
+                is_incomplete=True,
+                items=doc_completion_items(
                     ls, ls.needs_store.docs_per_type[requested_type], word_parts[2]
                 ),
             )
@@ -220,10 +220,10 @@ def complete_need_link(
         if requested_doc in ls.needs_store.needs_per_doc:
             substitution = word[word.find("->") :]
             start_char = line.find(substitution)
-            line_number = params.position[0]
+            line_number = params.position.line
             return CompletionList(
-                False,
-                [
+                is_incomplete=False,
+                items=[
                     CompletionItem(
                         label=need["id"],
                         insert_text=need["id"],
@@ -232,9 +232,12 @@ def complete_need_link(
                         additional_text_edits=[
                             TextEdit(
                                 range=Range(
-                                    start=Position(line_number, start_char),
+                                    start=Position(
+                                        line=line_number, character=start_char
+                                    ),
                                     end=Position(
-                                        line_number, start_char + len(substitution)
+                                        line=line_number,
+                                        character=start_char + len(substitution),
                                     ),
                                 ),
                                 new_text="",
@@ -262,8 +265,8 @@ def generate_need_id(
     """Generate a need ID including hash suffix."""
 
     user_name = getpass.getuser()
-    doc_uri = params.textDocument.uri
-    line_number = params.position[0]
+    doc_uri = params.text_document.uri
+    line_number = params.position.line
 
     if not need_type:
         try:
@@ -304,13 +307,13 @@ def complete_directive(ls, params, lines: List[str], word: str):
                 kind=CompletionItemKind.Snippet,
             )
         )
-    return CompletionList(False, items)
+    return CompletionList(is_incomplete=False, items=items)
 
 
 def complete_role_or_option(ls, params, lines: List[str], word: str):
     return CompletionList(
-        False,
-        [
+        is_incomplete=False,
+        items=[
             CompletionItem(
                 label=":id:",
                 detail="needs option",
@@ -341,7 +344,7 @@ def completions(ls, params: CompletionParams = None):
         return []
 
     lines, word = get_lines_and_word(ls, params)
-    line_number = params.position[0]
+    line_number = params.position.line
     if line_number >= len(lines):
         ls.show_message_log(
             f"line {line_number} is empty, no completion trigger characters detected"
@@ -464,8 +467,8 @@ async def did_definition(ls, params):
     if not line_directive:
         return None
 
-    pos = Position(line=line_directive)
-    return Location(uri=doc_uri, range=Range(pos, pos))
+    pos = Position(line=line_directive, character=0)
+    return Location(uri=doc_uri, range=Range(start=pos, end=pos))
 
 
 @needs_server.feature(HOVER)
