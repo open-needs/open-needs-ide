@@ -310,6 +310,34 @@ def complete_directive(ls, params, lines: List[str], word: str):
     return CompletionList(is_incomplete=False, items=items)
 
 
+def complete_md_directive(ls, params, lines: List[str], word: str):
+    # need_type ~ req, work, act, ...
+    items = []
+    for need_type, title in ls.needs_store.declared_types.items():
+        text = (
+            need_type + "} ${1:title}\n"
+            "---\n"
+            "id: ${2:"
+            + generate_need_id(ls, params, lines, word, need_type=need_type)
+            + "}\n"
+            "status: open\n"
+            "---\n"
+            "${3:content}.\n$0"
+            "```\n"
+        )
+        label = f".. {need_type}::"
+        items.append(
+            CompletionItem(
+                label=label,
+                detail=title,
+                insert_text=text,
+                insert_text_format=InsertTextFormat.Snippet,
+                kind=CompletionItemKind.Snippet,
+            )
+        )
+    return CompletionList(is_incomplete=False, items=items)
+
+
 def complete_role_or_option(ls, params, lines: List[str], word: str):
     return CompletionList(
         is_incomplete=False,
@@ -335,7 +363,7 @@ def complete_role_or_option(ls, params, lines: List[str], word: str):
 
 
 @needs_server.feature(
-    COMPLETION, CompletionOptions(trigger_characters=[">", "/", ":", "."])
+    COMPLETION, CompletionOptions(trigger_characters=[">", "/", ":", ".", "{"])
 )
 def completions(ls, params: CompletionParams = None):
     """Returns completion items."""
@@ -352,16 +380,47 @@ def completions(ls, params: CompletionParams = None):
         return []
     line = lines[line_number]
 
-    if word.startswith("->") or word.startswith(":need:`->"):
+    new_word = ""
+    if word.startswith(":need:`->"):
         new_word = word.replace(":need:`->", "->")
+
+    if word.startswith("{need}:`->"):
+        new_word = word.replace("{need}:`->", "->")
+
+    if word.startswith("->"):
+        new_word = word
+
+    if new_word:
         new_word = new_word.replace("`", "")  # in case need:`->...>...`
         return complete_need_link(ls, params, lines, line, new_word)
+
+    # if word.startswith("->") or word.startswith(":need:`->"):
+    #     new_word = word.replace(":need:`->", "->")
+    #     new_word = new_word.replace("`", "")  # in case need:`->...>...`
+    #     return complete_need_link(ls, params, lines, line, new_word)
 
     if word.startswith(":"):
         return complete_role_or_option(ls, params, lines, word)
 
+    if word.startswith("{need}:"):
+        return CompletionList(
+            is_incomplete=False,
+            items=[
+                CompletionItem(
+                    label=":need:",
+                    detail="need role",
+                    insert_text="`${1:ID}` $0",
+                    insert_text_format=InsertTextFormat.Snippet,
+                    kind=CompletionItemKind.Snippet,
+                ),
+            ],
+        )
+
     if word.startswith(".."):
         return complete_directive(ls, params, lines, word)
+
+    if word.startswith("```{"):
+        return complete_md_directive(ls, params, lines, word)
 
     return []
 

@@ -19,7 +19,8 @@
 	],
 	"activationEvents": [
 		"onCommand:open-needs-ide.load",
-		"onLanguage:restructuredtext"
+		"onLanguage:restructuredtext",
+		"onLanguage:markdown"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -47,6 +48,11 @@
 					".rst",
 					".rest"
 				]
+			},
+			{
+				"id": "markdown",
+				"aliases": ["Markdown"],
+				"extensions": [".md"]
 			}
 		],
 		"snippets": [

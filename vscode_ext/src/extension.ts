@@ -348,6 +348,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 		documentSelector: [
 			{ scheme: "file", language: "restructuredtext" },
 			{ scheme: "untitled", language: "restructuredtext" },
+			{ scheme: "file", language: "markdown" },
 		],
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
