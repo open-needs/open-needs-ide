@@ -2,14 +2,11 @@ Project archived. No maintenance anymore.
 =========================================
 
 This project is not maintained anymore and is archived. All the current Open-Needs IDE language features
-are moved into `Sphinx-Needs <https://github.com/useblocks/sphinxcontrib-needs>`_. The features will be
-automatically detected and integrated into `Esbonio language server <https://github.com/swyddfa/esbonio>`_.
+are moved into `Sphinx-Needs IDE support <https://sphinxcontrib-needs.readthedocs.io/en/latest/ide/index.html>`_. The features will be
+automatically detected by VsCode extension `reStructuredText <https://github.com/vscode-restructuredtext/vscode-restructuredtext>`_
+in your `Sphinx-Needs <https://sphinxcontrib-needs.readthedocs.io/en/latest/index.html>`_ project.
 
-Since Vscode extension `reStructuredText <https://github.com/vscode-restructuredtext/vscode-restructuredtext>`_
-supports Esbonio, so all the Open-Needs IDE features will be available automatically, so no additional Vscode
-extesnion is needed anymore. Therefore, Open-Needs IDE is shutdown.
-
-Thanks to everyone for their interests and contributions.
+Futher features development will be done inside the `Sphinx-Needs <https://sphinxcontrib-needs.readthedocs.io/en/latest/index.html>`_ project.
 
 Open-Needs IDE
 ==============
