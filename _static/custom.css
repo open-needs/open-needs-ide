@@ -1,0 +1,36 @@
+img.index-logo {
+    margin-top: 50px;
+    max-width: 80%;
+}
+
+/* Sphinx-Needs layout fixes for Furo theme */
+tr.need.content {
+    display: inherit !important;
+}
+
+td.need.head, td.need.content, td.need.footer {
+    padding: 5px;
+    color: #000000 !important;  /* Overwrite for furo dark mode */
+}
+
+div.table-wrapper {
+    overflow: hidden;
+}
+/* END: Sphinx-Needs layout fixes for Furo theme */
+
+h1, h2, h3, h4, h5, h6 {
+    border-bottom: 4px solid #ffe680;
+}
+
+div.oni-features div.card-body {
+    padding: 0 0 10px 0;
+}
+
+div.oni-features div.card-body p.card-text {
+    margin: 20px 10px 10px 10px;
+}
+
+div.open-needs-badges a {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
